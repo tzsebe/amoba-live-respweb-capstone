@@ -5,3 +5,14 @@ This is an online rendition of the Hungarian game, Amőba. It's basically 5-in-a
 This is implemented using Meteor.js.
 
 I am building this as my Capstone project for Coursera's [Full Stack Website Development](https://www.coursera.org/specializations/website-development) specialization.
+
+
+# Some Implementation Details
+
+## Player Matching Process
+
+(TODO: add this)
+
+## Game Mechanics and Data Flow
+
+(TODO: add this)
