@@ -16,3 +16,14 @@ I am building this as my Capstone project for Coursera's [Full Stack Website Dev
 ## Game Mechanics and Data Flow
 
 (TODO: add this)
+
+
+# Credits
+
+## Profile Cat Pics
+
+I opted to just make everyone's profile a random cat picture. I searched for free cat pictures, and found 50 of them here:
+
+https://newevolutiondesigns.com/50-free-hd-cat-wallpapers
+
+I grabbed them all, and created the thumbnails with imagemagick.

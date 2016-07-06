@@ -13,6 +13,18 @@ if (Meteor.isClient) {
     });
 }
 
+function getAvatarPic(str) {
+    var hash = 0;
+
+    if (str) {
+        for (var i = 0; i < str.length; ++i) {
+            hash += str.charCodeAt(i);
+        }
+    }
+
+    return "avatar-" + hash % 50 + ".jpg";
+}
+
 if (Meteor.isServer) {
     /**
      * Server-side account-creation stuff.
@@ -20,7 +32,7 @@ if (Meteor.isServer) {
     Accounts.onCreateUser(function(options,user) {
         user.profile = {
             username: options.username,
-            // TODO: avatar
+            avatar: getAvatarPic(options.username),
             score: 1000,
             invitation_token: {
                 test: "making sure this is visible."
