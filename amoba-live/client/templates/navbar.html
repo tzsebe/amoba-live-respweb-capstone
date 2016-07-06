@@ -1,0 +1,35 @@
+<template name="navbar">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Header with collapsible responsive option. -->
+            <div class="navbar-header">
+                <a href="/" class="navbar-brand">Am&#337;baLive</a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+                    <!-- Create standard "3 bar" button effect common to mobile apps. -->
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <!-- Main navbar content. -->
+            <div class="collapse navbar-collapse" id="main-navbar">
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="{{ isActiveRoute name='gameroom' }}">
+                        <a href="/gameroom">Game Room</a>
+                    </li>
+                    <li class="{{ isActiveRoute name='leaderboard' }}">
+                        <a href="/leaderboard">Leaderboard</a>
+                    </li>
+                    <li class="{{ isActiveRoute name='rules' }}">
+                        <a href="/rules">Rules</a>
+                    </li>
+                    <li class="{{ isActiveRoute name='about' }}">
+                        <a href="/about">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+

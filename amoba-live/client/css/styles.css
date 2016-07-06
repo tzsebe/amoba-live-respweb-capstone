@@ -1,0 +1,12 @@
+/**
+ * App styles.
+ */
+body {
+    /* Push content down so the fixed navbar doesn't hide it. */
+    padding-top: 60px;
+}
+
+h1 {
+    text-align: center;
+}
+
