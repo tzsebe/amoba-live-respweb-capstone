@@ -22,3 +22,5 @@ insecure                # Allow all DB writes from clients (for prototyping)
 bootswatch:slate
 iron:router
 zimme:active-route
+accounts-password
+ian:accounts-ui-bootstrap-3
