@@ -1,7 +1,17 @@
-/**
- * Any UI tweaks/look-and-feel adjustments needed once the document loads.
- */
+//
+// Data Subscriptions
+//
 
+Meteor.subscribe("user-data");
+
+
+//
+// Overall UI tweaks.
+//
+
+/**
+ * Javascript handlers to apply to components of the navbar when it's rendered.
+ */
 Template.navbar.onRendered(function() {
     // If we're in collapsed mode, also close the menu.
     $('.js-nav-item').click(function() {

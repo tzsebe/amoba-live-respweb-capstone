@@ -1,5 +1,13 @@
-import { Meteor } from 'meteor/meteor';
+//
+// Data publications
+//
 
-Meteor.startup(() => {
-  // code to run on server at startup
+/**
+ * Publish user data, including status.
+ */
+Meteor.publish('user-data', function() {
+    return Meteor.users.find(
+        {},
+        {fields: {profile: 1, status: 1}}
+    );
 });
