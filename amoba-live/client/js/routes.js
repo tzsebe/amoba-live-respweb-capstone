@@ -14,8 +14,12 @@ Router.route('/home', function () {
     this.render('home');
 });
 
-Router.route('/gameroom', function () {
-    this.render('gameroom');
+Router.route('/lobby', function () {
+    this.render('lobby');
+});
+
+Router.route('/history', function () {
+    this.render('history');
 });
 
 Router.route('/leaderboard', function () {
