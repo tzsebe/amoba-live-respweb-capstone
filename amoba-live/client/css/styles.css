@@ -10,3 +10,26 @@ h1 {
     text-align: center;
 }
 
+/**
+ * Lobby stuff
+ */
+.no-underline {
+    text-decoration: none !important;
+}
+
+.browse-users-item {
+    padding: 5px;
+    margin-top: 10px;
+    border: 1px solid darkgrey;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.browse-users-item:hover {
+    background: darkgrey;
+}
+
+.browse-users-item img {
+    float: left;
+    height: 40px;
+}

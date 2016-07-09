@@ -56,9 +56,18 @@
 <!-- Browse/Search users. -->
 <template name="browse_users">
     <h3>Browse Users</h3>
-    <ul>
-        {{#each users}}
-        <li>{{ profile.username }}</li>
-        {{/each}}
-    </ul>
+    <div class="row">
+    {{#each users}}
+        <div class="col-md-2 col-sm-4 col-xs-6">
+            <a href="#" class="no-underline">
+                <div class="browse-users-item">
+                    <img src="/avatars/{{ profile.avatar }}">
+                    {{ profile.username }} [{{ displayOnlineStatus status }}]
+                    <br />
+                    {{ profile.score }}
+                </div>
+            </a>
+        </div>
+    {{/each}}
+    </div>
 </template>
