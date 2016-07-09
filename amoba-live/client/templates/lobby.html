@@ -1,6 +1,64 @@
 <template name="lobby">
     <div class="container">
         <h2>Lobby</h2>
-        <p>TODO - this is the big one - most likely, this will actually need to be two templates. Either that, or check for active games and have the router redirect accordingly.</p>
+        <p>Welcome to the Game Lobby! From here, you can view your profile, search for other users, and challenge other players to play a game.</p>
+
+        {{#if currentUser}}
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                {{#with profile}}
+                {{> user_profile }}
+                {{/with}}
+            </div>
+            <div class="col-md-6 col-xs-12">
+                {{> invitation_details }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                {{> browse_users }}
+            </div>
+        </div>
+        {{else}}
+        <div class="alert alert-info">
+            You must be logged in to access this section.
+        </div>
+        {{/if}}
     </div>
+</template>
+
+<!-- User profile, including picture. Re-usable, both to show your own status, and that of other users. -->
+<template name="user_profile">
+    <h3>Your User Profile</h3>
+    <ul>
+        <li><b>Avatar:</b> {{ avatar }}</li>
+        <li><b>Username:</b> {{ username }}</li>
+        <li><b>Score:</b> {{ score }}</li>
+        <li><b>Games Played:</b> {{ games }}</li>
+        <li><b>Wins:</b> {{ wins }}</li>
+    </ul>
+</template>
+
+<!-- Game invitation info (your token and invitations sent to you) -->
+<template name="invitation_details">
+    <h3>Invitation Details</h3>
+    <ul>
+        <li><b>Your Token:</b> </li>
+        <li><b>Open Invitations:</b>
+            <ul>
+                <li>(TODO: invitations)</li>
+            </ul>
+        </li>
+    </ul>
+</template>
+
+<!-- Browse/Search users. -->
+<template name="browse_users">
+    <h3>Browse Users</h3>
+    <ul>
+        {{#each users}}
+        <li>{{ profile.username }}</li>
+        {{/each}}
+    </ul>
 </template>

@@ -15,6 +15,8 @@ Meteor.startup(function() {
                     username: username,
                     avatar: avatar,
                     score: 1000,
+                    games: 0,
+                    wins: 0,
                     invitation_token: {
                         test: "making sure this is visible."
                     }
@@ -24,7 +26,6 @@ Meteor.startup(function() {
                 services:{
                     // this is 'aaaaaa'
                     password: {"bcrypt" : "$2a$10$yqawdeYfSStoiFXclBk11O4ku26kaZjy49xDJHOW8xisP2QUTZjBy"}
-                    //password: {"bcrypt" : "$2a$10$I3erQ084OiyILTv8ybtQ4ON6wusgPbMZ6.P33zzSDei.BbDL.Q4EO"}
                 }
             });
         }

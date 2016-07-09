@@ -34,6 +34,8 @@ if (Meteor.isServer) {
             username: options.username,
             avatar: getAvatarPic(options.username),
             score: 1000,
+            games: 0,
+            wins: 0,
             invitation_token: {
                 test: "making sure this is visible."
             }
