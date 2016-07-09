@@ -39,3 +39,37 @@ Template.user_popup_content_adapter.helpers({
         return Session.get('browse-user');
     }
 });
+
+Template.user_popup_content.events({
+    'click .js-challenge-user': function(event) {
+        console.log("Challenging " + this._id);
+        Meteor.call('challengeUser', this, function(err, result) {
+            if (err) {
+                console.log("Error occurred while challenging user:", err);
+            } else if (result) {
+                console.log("Success!", result);
+                $('#user-popup').modal('hide');
+            }
+        });
+    }
+});
+
+Template.invitation_details.helpers({
+    activeOutgoingInvitation: function() {
+        if (Meteor.user() && Meteor.user().profile.invitation_token) {
+            var token = Meteor.user().profile.invitation_token;
+            if (token.user_id && token.expiration_date && token.expiration_date > new Date()) {
+                return token;
+            }
+        }
+
+        return null;
+    },
+    activeIncomingInvitations: function() {
+        if (Meteor.user()) {
+            // TODO: populate the incoming invitations.
+        }
+
+        return null;
+    }
+});

@@ -44,7 +44,13 @@
 <template name="invitation_details">
     <h3>Invitation Details</h3>
     <ul>
-        <li><b>Your Token:</b> </li>
+        <li><b>Your Token:</b> 
+            {{#if activeOutgoingInvitation}}
+            Invitation sent to {{ getUserName activeOutgoingInvitation.user_id }}, expires {{ activeOutgoingInvitation.expiration_date }}
+            {{else}}
+            (no invitations)
+            {{/if}}
+        </li>
         <li><b>Open Invitations:</b>
             <ul>
                 <li>(TODO: invitations)</li>
@@ -103,7 +109,7 @@
         {{#if isMyUser this}}
         <button type="button" class="btn btn-disabled disabled">Cannot play with yourself</button>
         {{else}}
-        <button type="button" class="btn btn-primary">Challenge User!</button>
+        <button type="button" class="btn btn-primary js-challenge-user">Challenge User!</button>
         {{/if}}
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
