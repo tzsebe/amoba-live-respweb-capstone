@@ -53,7 +53,9 @@
         </li>
         <li><b>Open Invitations:</b>
             <ul>
-                <li>(TODO: invitations)</li>
+                {{#each activeIncomingInvitations}}
+                <li>Invitation from {{ profile.username }}, expires {{ profile.invitation_token.expiration_date }}</li>
+                {{/each}}
             </ul>
         </li>
     </ul>

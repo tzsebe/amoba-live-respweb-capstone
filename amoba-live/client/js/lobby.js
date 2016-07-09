@@ -67,7 +67,10 @@ Template.invitation_details.helpers({
     },
     activeIncomingInvitations: function() {
         if (Meteor.user()) {
-            // TODO: populate the incoming invitations.
+            return Meteor.users.find({
+                "profile.invitation_token.user_id": Meteor.user()._id,
+                "profile.invitation_token.expiration_date": {$gt: new Date()}
+            });
         }
 
         return null;
