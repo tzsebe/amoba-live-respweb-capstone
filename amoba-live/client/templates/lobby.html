@@ -6,7 +6,7 @@
         {{#if currentUser}}
         <div class="row">
             <div class="col-md-6 col-xs-12">
-                {{#with profile}}
+                {{#with currentUser}}
                 {{> user_profile }}
                 {{/with}}
             </div>
@@ -30,13 +30,13 @@
 
 <!-- User profile, including picture. Re-usable, both to show your own status, and that of other users. -->
 <template name="user_profile">
-    <h3>Your User Profile</h3>
+    <h3>{{ profile.username }}</h3>
     <ul>
-        <li><b>Avatar:</b> {{ avatar }}</li>
-        <li><b>Username:</b> {{ username }}</li>
-        <li><b>Score:</b> {{ score }}</li>
-        <li><b>Games Played:</b> {{ games }}</li>
-        <li><b>Wins:</b> {{ wins }}</li>
+        <li><b>Avatar:</b> {{ profile.avatar }}</li>
+        <li><b>Username:</b> {{ profile.username }}</li>
+        <li><b>Score:</b> {{ profile.score }}</li>
+        <li><b>Games Played:</b> {{ profile.games }}</li>
+        <li><b>Wins:</b> {{ profile.wins }}</li>
     </ul>
 </template>
 
@@ -56,18 +56,55 @@
 <!-- Browse/Search users. -->
 <template name="browse_users">
     <h3>Browse Users</h3>
+
+    <!-- Display list of users -->
     <div class="row">
     {{#each users}}
         <div class="col-md-2 col-sm-4 col-xs-6">
-            <a href="#" class="no-underline">
+            <a href="#" class="no-underline js-browse-user" data-toggle="modal" data-target="#user-popup">
                 <div class="browse-users-item">
                     <img src="/avatars/{{ profile.avatar }}">
-                    {{ profile.username }} [{{ displayOnlineStatus status }}]
+                    {{ profile.username }} {{#if isMyUser this}}(YOU){{else}}[{{ displayOnlineStatus status }}]{{/if}}
                     <br />
                     {{ profile.score }}
                 </div>
             </a>
         </div>
     {{/each}}
+    </div>
+
+    <!-- Modal to pop up user profile -->
+    <div class="modal fade" id="user-popup" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            {{> user_popup_content_adapter}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- A simple way to pass the data context along to the modal template in a reactive fashion. -->
+<template name="user_popup_content_adapter">
+    {{#with userFromSession}}
+    {{> user_popup_content}}
+    {{/with}}
+</template>
+
+<!-- Modal body template, reactive to browsed user. -->
+<template name="user_popup_content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4>Challenge This User?</h4>
+    </div>
+    <div class="modal-body">
+    {{> user_profile}}
+    </div>
+    <div class="modal-footer">
+        {{#if isMyUser this}}
+        <button type="button" class="btn btn-disabled disabled">Cannot play with yourself</button>
+        {{else}}
+        <button type="button" class="btn btn-primary">Challenge User!</button>
+        {{/if}}
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
 </template>
