@@ -19,6 +19,16 @@ formatMMSS = function(date) {
     return zeroPadTime(date.getMinutes()) + ":" + zeroPadTime(date.getSeconds());
 }
 
+handleMeteorException = function(exception) {
+    if (exception) {
+        var msg = "[" + exception.error + "] - " + exception.reason;
+        if (exception.details) {
+            msg += ": " + exception.details;
+        }
+
+        Alerts.add(msg);
+    }
+}
 
 //
 // Template custom helpers
@@ -48,8 +58,6 @@ function hasValidInvitation(fromUser, toUser) {
 }
 
 Template.registerHelper("challengeButtonText", function(user) {
-    console.log("challegeButtonText yo! User is " + user.profile.username);
-
     var hasValidOutgoingInvitation = hasValidInvitation(Meteor.user(), user);
     var hasValidIncomingInvitation = hasValidInvitation(user, Meteor.user());
 

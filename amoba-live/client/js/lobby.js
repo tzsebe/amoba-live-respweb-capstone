@@ -45,11 +45,11 @@ Template.user_popup_content.events({
         console.log("Challenging " + this._id);
         Meteor.call('matchUsers', this, function(err, result) {
             if (err) {
-                console.log("Error occurred while challenging user:", err);
-            } else if (result) {
-                console.log("Success!", result);
-                $('#user-popup').modal('hide');
+                handleMeteorException(err);
             }
+
+            // Always dismiss the modal.
+            $('#user-popup').modal('hide');
         });
     }
 });
@@ -58,29 +58,22 @@ Template.user_popup_content.events({
 // while we're actually looking at the page and it's relevant.
 var invitationExpirationInterval = null;
 Template.invitation_details.onDestroyed(function() {
-    console.log("invitation details destroyed.");
     if (invitationExpirationInterval) {
-        console.log("Clearing interval...");
         clearInterval(invitationExpirationInterval);
     }
 });
 
 Template.invitation_details.onRendered(function() {
-    console.log("Invitation details rendered.");
-
     if (invitationExpirationInterval) {
-        console.log("Clearing interval...");
         clearInterval(invitationExpirationInterval);
     }
 
     invitationExpirationInterval = setInterval(function() {
-        console.log("Invitation interval tick...");
         $('.js-invitation-timer').each(function() {
             // can't use .data() here, because jQuery doesn't update it dynamically :-(
             var exp = $(this).attr('data-expiration');
             var now = new Date().getTime();
             if (now >= exp) {
-                console.log("Expiring:", this);
                 $(this).text("expired");
             } else {
                 var diff = new Date(exp - now);
@@ -97,7 +90,6 @@ Template.invitation_details.helpers({
         if (Meteor.user() && Meteor.user().profile.invitation_token) {
             var token = Meteor.user().profile.invitation_token;
             if (token.user_id && token.expiration_date && token.expiration_date > new Date()) {
-                console.log("Token: ", token);
                 return Meteor.user();
             }
         }
@@ -119,7 +111,6 @@ Template.invitation_details.helpers({
 
 Template.invitation_details.events({
     'click .js-invitation-item': function(event) {
-        console.log("clicked ", this);
         if (Meteor.user()) {
             if (this._id == Meteor.user()._id) {
                 console.log("Outgoing - look up user from our invitation token.");
