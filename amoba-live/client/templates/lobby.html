@@ -43,30 +43,32 @@
 <!-- Game invitation info (your token and invitations sent to you) -->
 <template name="invitation_details">
     <h3>Invitation Details</h3>
-    <ul>
-        <li><b>Your Token:</b>
+    <h4>Outgoing Invitation:</h4>
+    <ul class="list-group">
+        <li class="list-group-item invitation-item js-invitation-item">
             {{#if activeOutgoingInvitation}}
-            Invitation sent to {{ getUserName activeOutgoingInvitation.user_id }}
+            {{ getUserName activeOutgoingInvitation.user_id }}
             <span id="invitation-out-timer"
-                  class="js-invitation-timer"
+                  class="js-invitation-timer badge"
                   title="expires {{ activeOutgoingInvitation.expiration_date }}"
                   data-expiration="{{ dateToEpoch activeOutgoingInvitation.expiration_date }}"></span>
             {{else}}
             (no invitations)
             {{/if}}
         </li>
-        <li><b>Open Invitations:</b>
-            <ul>
-                {{#each activeIncomingInvitations}}
-                <li>Invitation from {{ profile.username }}
-                    <span id="invitation-in-{{_id}}-timer"
-                          class="js-invitation-timer"
-                          title="expires {{ profile.invitation_token.expiration_date }}"
-                          data-expiration="{{ dateToEpoch profile.invitation_token.expiration_date }}"></span>
-                </li>
-                {{/each}}
-            </ul>
+    </ul>
+
+    <h4>Incoming Invitations:</h4>
+    <ul class="list-group">
+        {{#each activeIncomingInvitations}}
+        <li class="list-group-item invitation-item js-invitation-item">
+            {{ profile.username }}
+            <span id="invitation-in-{{_id}}-timer"
+                  class="js-invitation-timer badge"
+                  title="expires {{ profile.invitation_token.expiration_date }}"
+                  data-expiration="{{ dateToEpoch profile.invitation_token.expiration_date }}"></span>
         </li>
+        {{/each}}
     </ul>
 </template>
 

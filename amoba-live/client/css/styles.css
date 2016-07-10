@@ -33,3 +33,9 @@ h1 {
     float: left;
     height: 40px;
 }
+
+.invitation-item:hover {
+    background: darkgrey;
+    cursor: pointer;
+}
+

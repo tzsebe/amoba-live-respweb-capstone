@@ -80,7 +80,9 @@ Template.invitation_details.onRendered(function() {
             var exp = $(this).attr('data-expiration');
             var now = new Date().getTime();
             if (now >= exp) {
-                $(this).text("expired");
+                console.log("Expiring:", this);
+                $(this).text("expired").removeClass("js-invitation-timer");
+                $(this).parents("li").removeClass("js-invitation-item").addClass("disabled");
             } else {
                 var diff = new Date(exp - now);
                 $(this).text(formatMMSS(diff));
@@ -107,9 +109,16 @@ Template.invitation_details.helpers({
             return Meteor.users.find({
                 "profile.invitation_token.user_id": Meteor.user()._id,
                 "profile.invitation_token.expiration_date": {$gt: new Date()}
-            });
+            },
+            {sort: {'profile.username': 1}});
         }
 
         return null;
+    }
+});
+
+Template.invitation_details.events({
+    'click .js-invitation-item': function(event) {
+        console.log("clicked ", this);
     }
 });
