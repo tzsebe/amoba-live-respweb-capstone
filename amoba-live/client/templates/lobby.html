@@ -44,9 +44,13 @@
 <template name="invitation_details">
     <h3>Invitation Details</h3>
     <ul>
-        <li><b>Your Token:</b> 
+        <li><b>Your Token:</b>
             {{#if activeOutgoingInvitation}}
-            Invitation sent to {{ getUserName activeOutgoingInvitation.user_id }}, expires {{ activeOutgoingInvitation.expiration_date }}
+            Invitation sent to {{ getUserName activeOutgoingInvitation.user_id }}
+            <span id="invitation-out-timer"
+                  class="js-invitation-timer"
+                  title="expires {{ activeOutgoingInvitation.expiration_date }}"
+                  data-expiration="{{ dateToEpoch activeOutgoingInvitation.expiration_date }}"></span>
             {{else}}
             (no invitations)
             {{/if}}
@@ -54,7 +58,12 @@
         <li><b>Open Invitations:</b>
             <ul>
                 {{#each activeIncomingInvitations}}
-                <li>Invitation from {{ profile.username }}, expires {{ profile.invitation_token.expiration_date }}</li>
+                <li>Invitation from {{ profile.username }}
+                    <span id="invitation-in-{{_id}}-timer"
+                          class="js-invitation-timer"
+                          title="expires {{ profile.invitation_token.expiration_date }}"
+                          data-expiration="{{ dateToEpoch profile.invitation_token.expiration_date }}"></span>
+                </li>
                 {{/each}}
             </ul>
         </li>

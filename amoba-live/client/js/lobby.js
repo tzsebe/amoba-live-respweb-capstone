@@ -54,6 +54,43 @@ Template.user_popup_content.events({
     }
 });
 
+// Keeping track of the interval, so we ensure we've only got one going, and only
+// while we're actually looking at the page and it's relevant.
+var invitationExpirationInterval = null;
+Template.invitation_details.onDestroyed(function() {
+    console.log("invitation details destroyed.");
+    if (invitationExpirationInterval) {
+        console.log("Clearing interval...");
+        clearInterval(invitationExpirationInterval);
+    }
+});
+
+Template.invitation_details.onRendered(function() {
+    console.log("Invitation details rendered.");
+
+    if (invitationExpirationInterval) {
+        console.log("Clearing interval...");
+        clearInterval(invitationExpirationInterval);
+    }
+
+    invitationExpirationInterval = setInterval(function() {
+        console.log("Invitation interval tick...");
+        $('.js-invitation-timer').each(function() {
+            // can't use .data() here, because jQuery doesn't update it dynamically :-(
+            var exp = $(this).attr('data-expiration');
+            var now = new Date().getTime();
+            if (now >= exp) {
+                $(this).text("expired");
+            } else {
+                var diff = new Date(exp - now);
+                $(this).text(formatMMSS(diff));
+            }
+
+        });
+
+    }, 1000);
+});
+
 Template.invitation_details.helpers({
     activeOutgoingInvitation: function() {
         if (Meteor.user() && Meteor.user().profile.invitation_token) {
