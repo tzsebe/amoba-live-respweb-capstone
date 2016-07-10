@@ -24,7 +24,7 @@ Template.browse_users.events({
         if (Meteor.user()) {
             // Set the data context for the modal, which will be the user for
             // the template we clicked in.
-            Session.set('browse-user', this);
+            Session.set('challenge-user-profile', this);
         }
     }
 });
@@ -36,14 +36,14 @@ Template.browse_users.events({
  */
 Template.user_popup_content_adapter.helpers({
     userFromSession: function() {
-        return Session.get('browse-user');
+        return Session.get('challenge-user-profile');
     }
 });
 
 Template.user_popup_content.events({
-    'click .js-challenge-user': function(event) {
+    'click .js-match-user': function(event) {
         console.log("Challenging " + this._id);
-        Meteor.call('challengeUser', this, function(err, result) {
+        Meteor.call('matchUsers', this, function(err, result) {
             if (err) {
                 console.log("Error occurred while challenging user:", err);
             } else if (result) {
@@ -98,7 +98,8 @@ Template.invitation_details.helpers({
         if (Meteor.user() && Meteor.user().profile.invitation_token) {
             var token = Meteor.user().profile.invitation_token;
             if (token.user_id && token.expiration_date && token.expiration_date > new Date()) {
-                return token;
+                console.log("Token: ", token);
+                return Meteor.user();
             }
         }
 
@@ -120,5 +121,14 @@ Template.invitation_details.helpers({
 Template.invitation_details.events({
     'click .js-invitation-item': function(event) {
         console.log("clicked ", this);
+        if (Meteor.user()) {
+            if (this._id == Meteor.user()._id) {
+                console.log("Outgoing - look up user from our invitation token.");
+                Session.set('challenge-user-profile', Meteor.users.findOne({_id: this.profile.invitation_token.user_id}));
+            } else {
+                console.log("Incoming - look up id directly.");
+                Session.set('challenge-user-profile', this);
+            }
+        }
     }
 });

@@ -45,23 +45,27 @@
     <h3>Invitation Details</h3>
     <h4>Outgoing Invitation:</h4>
     <ul class="list-group">
-        <li class="list-group-item invitation-item js-invitation-item">
-            {{#if activeOutgoingInvitation}}
-            {{ getUserName activeOutgoingInvitation.user_id }}
+        {{#if activeOutgoingInvitation}}
+        {{#with activeOutgoingInvitation}}
+        <li class="list-group-item invitation-item js-invitation-item" data-toggle="modal" data-target="#user-popup">
+            {{ getUserName profile.invitation_token.user_id }}
             <span id="invitation-out-timer"
                   class="js-invitation-timer badge"
-                  title="expires {{ activeOutgoingInvitation.expiration_date }}"
-                  data-expiration="{{ dateToEpoch activeOutgoingInvitation.expiration_date }}"></span>
-            {{else}}
-            (no invitations)
-            {{/if}}
+                  title="expires {{ profile.invitation_token.expiration_date }}"
+                  data-expiration="{{ dateToEpoch profile.invitation_token.expiration_date }}"></span>
         </li>
+        {{/with}}
+        {{else}}
+        <li class="list-group-item invitation-item">
+            (no invitations)
+        </li>
+        {{/if}}
     </ul>
 
     <h4>Incoming Invitations:</h4>
     <ul class="list-group">
         {{#each activeIncomingInvitations}}
-        <li class="list-group-item invitation-item js-invitation-item">
+        <li class="list-group-item invitation-item js-invitation-item" data-toggle="modal" data-target="#user-popup">
             {{ profile.username }}
             <span id="invitation-in-{{_id}}-timer"
                   class="js-invitation-timer badge"
@@ -113,7 +117,7 @@
 <template name="user_popup_content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4>Challenge This User?</h4>
+        <h4>Play a Game?</h4>
     </div>
     <div class="modal-body">
     {{> user_profile}}
@@ -122,7 +126,7 @@
         {{#if isMyUser this}}
         <button type="button" class="btn btn-disabled disabled">Cannot play with yourself</button>
         {{else}}
-        <button type="button" class="btn btn-primary js-challenge-user">Challenge User!</button>
+        <button type="button" class="btn btn-primary js-match-user">{{challengeButtonText this}}</button>
         {{/if}}
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>

@@ -40,6 +40,28 @@ Template.registerHelper("isMyUser", function(user) {
     return (user && Meteor.user() && user._id == Meteor.user()._id);
 });
 
+function hasValidInvitation(fromUser, toUser) {
+    if (fromUser && fromUser.profile.invitation_token && toUser) {
+        var fromToken = fromUser.profile.invitation_token;
+        return (fromToken.user_id == toUser._id && fromToken.expiration_date > new Date());
+    }
+}
+
+Template.registerHelper("challengeButtonText", function(user) {
+    console.log("challegeButtonText yo! User is " + user.profile.username);
+
+    var hasValidOutgoingInvitation = hasValidInvitation(Meteor.user(), user);
+    var hasValidIncomingInvitation = hasValidInvitation(user, Meteor.user());
+
+    if (hasValidOutgoingInvitation) {
+        return "Renew Challenge!";
+    } else if (hasValidIncomingInvitation) {
+        return "Accept Challenge!";
+    } else {
+        return "Challenge User!";
+    }
+});
+
 Template.registerHelper("displayOnlineStatus", function(status) {
     if (status && status.online) {
         return "online";

@@ -6,7 +6,7 @@
 //
 
 Meteor.methods({
-    challengeUser: function(targetUser) {
+    matchUsers: function(targetUser) {
         // Validate all input
         if (!Meteor.user()) {
             throw new Meteor.Error(400, "You must be logged in to perform this action.");
