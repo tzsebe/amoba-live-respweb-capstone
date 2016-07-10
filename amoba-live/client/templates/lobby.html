@@ -56,7 +56,7 @@
         </li>
         {{/with}}
         {{else}}
-        <li class="list-group-item invitation-item">
+        <li class="list-group-item">
             (no invitations)
         </li>
         {{/if}}
@@ -71,6 +71,10 @@
                   class="js-invitation-timer badge"
                   title="expires {{ profile.invitation_token.expiration_date }}"
                   data-expiration="{{ dateToEpoch profile.invitation_token.expiration_date }}"></span>
+        </li>
+        {{else}}
+        <li class="list-group-item">
+            (no invitations)
         </li>
         {{/each}}
     </ul>

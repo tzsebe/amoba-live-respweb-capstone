@@ -81,8 +81,7 @@ Template.invitation_details.onRendered(function() {
             var now = new Date().getTime();
             if (now >= exp) {
                 console.log("Expiring:", this);
-                $(this).text("expired").removeClass("js-invitation-timer");
-                $(this).parents("li").removeClass("js-invitation-item").addClass("disabled");
+                $(this).text("expired");
             } else {
                 var diff = new Date(exp - now);
                 $(this).text(formatMMSS(diff));
