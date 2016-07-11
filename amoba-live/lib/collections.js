@@ -5,15 +5,16 @@
 Games = new Mongo.Collection("games");
 
 /**
- * - Status
- * - Player 1 ID
- * - Player 2 ID
- * - Date started
- * - Date ended
- * - Last move timestamp
- * - Moves (x, y pairs)
- * - result
- * - TODO: num likes
+ * Here's how these fields work:
+ *  - player1Id/player2Id: The userId of players in this game
+ *  - creationDate: When the game was created.
+ *  - lastMoveDate: When the last move was made
+ *  - endDate: For an ended game, when it was ended.
+ *  - outcome: Outcome of the game:
+ *      - one of the players can win (1 or 2)
+ *      - it can be a draw if the board was filled with no winner
+ *      - it can be abandoned if there are less than 2 total moves, and the game timed out.
+ *  - moves: List of coordinates of moves, in order (player 1 goes first, then player 2, and so on).
  */
 Games.attachSchema({
     player1Id: {
@@ -24,7 +25,7 @@ Games.attachSchema({
         type: String,
         regEx: SimpleSchema.RegEx.Id
     },
-    startDate: {
+    creationDate: {
         type: Date
     },
     lastMoveDate: {
@@ -35,10 +36,10 @@ Games.attachSchema({
         type: Date,
         optional: true
     },
-    result: {
+    outcome: {
         type: String,
         optional: true,
-        allowedValues: ['player1_win', 'player2_win', 'draw']
+        allowedValues: ['player1_win', 'player2_win', 'draw', 'abandoned']
     },
     moves: {
         type: [Object],

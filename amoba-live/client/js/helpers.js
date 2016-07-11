@@ -79,7 +79,10 @@ function userStatus(title, imgBasename) {
 
 Template.registerHelper("getUserStatus", function(user) {
     if (user) {
-        if (user.status.online) {
+        if (user.profile.invitation_token.current_game) {
+            return userStatus("Playing a Game", "busy.png");
+        }
+        if (user.status && user.status.online) {
             return userStatus("Available", "available.png");
         }
     }

@@ -1,0 +1,16 @@
+<template name="game_details">
+    <div class="container">
+        <h2>Game Details</h2>
+
+        GameId: {{gameId}}
+        {{> game}}
+    </div>
+</template>
+
+<template name="game">
+    <ul>
+        <li>{{getUserName player1Id}} vs. {{getUserName player2Id}}</li>
+        <li>Creation Date: {{creationDate}}</li>
+        <li>Outcome: {{#if outcome}}{{outcome}}{{else}}(no outcome yet){{/if}}</li>
+    </ul>
+</template>

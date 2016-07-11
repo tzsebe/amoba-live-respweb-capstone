@@ -1,6 +1,18 @@
 <template name="game_log">
     <div class="container">
         <h2>Game Log</h2>
-        <p>TODO</p>
+        <p>(TODO: text and filters)</p>
+
+        {{> game_history}}
     </div>
+</template>
+
+<template name="game_history">
+    <ul class="list-group">
+    {{#each games}}
+        <li class="list-group-item">
+            <a href="game_log/{{_id}}">Game between {{getUserName player1Id}} and {{ getUserName player2Id}}, started {{creationDate}}</a>
+        </li>
+    {{/each}}
+    </ul>
 </template>
