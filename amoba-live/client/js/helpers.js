@@ -70,6 +70,16 @@ Template.registerHelper("challengeButtonText", function(user) {
     }
 });
 
+Template.registerHelper("getUserStatus", function(user) {
+    if (user) {
+        if (user.status.online) {
+            return "available";
+        }
+    }
+
+    return "offline";
+});
+
 Template.registerHelper("displayOnlineStatus", function(status) {
     if (status && status.online) {
         return "online";

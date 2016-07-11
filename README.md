@@ -27,3 +27,9 @@ I opted to just make everyone's profile a random cat picture. I searched for fre
 https://newevolutiondesigns.com/50-free-hd-cat-wallpapers
 
 I grabbed them all, and created the thumbnails with imagemagick.
+
+## User Status Icons
+
+The user status icons come from AdiumXtras:
+
+http://adiumxtras.com/index.php?a=xtras&xtra_id=2246

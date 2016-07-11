@@ -30,7 +30,7 @@
 
 <!-- User profile, including picture. Re-usable, both to show your own status, and that of other users. -->
 <template name="user_profile">
-    <h3>{{ profile.username }}</h3>
+    <h3>{{ profile.username }} <img src="/status_icons/{{getUserStatus this}}.png" title="{{getUserStatus this}}" class="user-status"></h3>
     <ul>
         <li><b>Avatar:</b> {{ profile.avatar }}</li>
         <li><b>Username:</b> {{ profile.username }}</li>
@@ -90,8 +90,8 @@
         <div class="col-md-2 col-sm-4 col-xs-6">
             <a href="#" class="no-underline js-browse-user" data-toggle="modal" data-target="#user-popup">
                 <div class="browse-users-item">
-                    <img src="/avatars/{{ profile.avatar }}">
-                    {{ profile.username }} {{#if isMyUser this}}(YOU){{else}}[{{ displayOnlineStatus status }}]{{/if}}
+                    <img src="/avatars/{{ profile.avatar }}" class="mini-avatar">
+                    {{ profile.username }} <img src="/status_icons/{{getUserStatus this}}.png" title="{{getUserStatus this}}" class="user-status">
                     <br />
                     {{ profile.score }}
                 </div>

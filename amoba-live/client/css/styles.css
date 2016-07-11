@@ -29,9 +29,13 @@ h1 {
     background: darkgrey;
 }
 
-.browse-users-item img {
+.browse-users-item .mini-avatar {
     float: left;
     height: 40px;
+}
+
+.browse-users-item .user-status {
+    height: 15px;
 }
 
 .invitation-item:hover {
