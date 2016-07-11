@@ -18,8 +18,8 @@ Router.route('/lobby', function () {
     this.render('lobby');
 });
 
-Router.route('/history', function () {
-    this.render('history');
+Router.route('/game_log', function () {
+    this.render('game_log');
 });
 
 Router.route('/leaderboard', function () {
