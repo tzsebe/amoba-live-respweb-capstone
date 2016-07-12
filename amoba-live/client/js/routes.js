@@ -29,7 +29,7 @@ Router.route('/game_log', function () {
 Router.route('/game_log/:gameId', function () {
     console.log("Router: game id is " + this.params.gameId);
     this.render('game_details', {
-        data: Games.findOne({_id: this.params.gameId})
+        data: {gameId: this.params.gameId}
     });
 });
 

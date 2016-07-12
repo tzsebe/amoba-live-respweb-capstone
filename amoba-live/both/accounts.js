@@ -11,6 +11,15 @@ if (Meteor.isClient) {
     Accounts.ui.config({
         passwordSignupFields: "USERNAME_AND_EMAIL"
     });
+
+    /**
+     * If we have an active game, then redirect to the game when logging in.
+     */
+    Accounts.onLogin(function() {
+        if (hasActiveGame(Meteor.user())) {
+            Router.go('/lobby');
+        }
+    });
 }
 
 function getAvatarPic(str) {

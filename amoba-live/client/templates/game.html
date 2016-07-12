@@ -2,15 +2,23 @@
     <div class="container">
         <h2>Game Details</h2>
 
-        GameId: {{gameId}}
-        {{> game}}
+        <!-- Game metadata (players, whose turn, timers, etc.) -->
+        <section>
+        </section>
+
+        <!-- Game board -->
+        <section>
+        </section>
+
+        GameId: {{game._id}}
+
+        {{#with game}}
+        <ul>
+            <li>{{getUserName player1Id}} vs. {{getUserName player2Id}}</li>
+            <li>Creation Date: {{creationDate}}</li>
+            <li>Outcome: {{#if outcome}}{{outcome}}{{else}}(no outcome yet){{/if}}</li>
+        </ul>
+        {{/with}}
     </div>
 </template>
 
-<template name="game">
-    <ul>
-        <li>{{getUserName player1Id}} vs. {{getUserName player2Id}}</li>
-        <li>Creation Date: {{creationDate}}</li>
-        <li>Outcome: {{#if outcome}}{{outcome}}{{else}}(no outcome yet){{/if}}</li>
-    </ul>
-</template>
