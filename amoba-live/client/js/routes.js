@@ -15,7 +15,11 @@ Router.route('/home', function () {
 });
 
 Router.route('/lobby', function () {
-    this.render('lobby');
+    if (Meteor.user() && Meteor.user().profile.invitation_token.current_game) {
+        this.redirect("/game_log/" + Meteor.user().profile.invitation_token.current_game);
+    } else {
+        this.render('lobby');
+    }
 });
 
 Router.route('/game_log', function () {

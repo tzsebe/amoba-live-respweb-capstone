@@ -83,40 +83,6 @@ Meteor.methods({
 
             setCurrentGame(player1Id, gameId);
             setCurrentGame(player2Id, gameId);
-            /*
-            Meteor.users.update({_id: player1Id},
-                {
-                    $set: {
-                        "profile.invitation_token": {
-                            current_game: gameId
-                        }
-                    }
-                }
-            );
-            Meteor.users.update({_id: player2Id},
-                {
-                    $set: {
-                        "profile.invitation_token": {
-                            current_game: gameId
-                        }
-                    }
-                }
-            );
-            */
-
-
-            /*
-            Meteor.users.update(
-                {_id: {$in: [player1Id, player2Id]}},
-                {
-                    $set: {
-                        "profile.invitation_token": {
-                            current_game: gameId
-                        }
-                    }
-                }
-            );
-            */
 
             return null;
         } else {

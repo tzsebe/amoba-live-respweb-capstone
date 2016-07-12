@@ -18,7 +18,7 @@
                     <li class="js-nav-item {{ isActiveRoute name='lobby' }}">
                         <a href="/lobby">Lobby</a>
                     </li>
-                    <li class="js-nav-item {{ isActiveRoute name='game_log' }}">
+                    <li class="js-nav-item {{ isActiveRoute regex='game_log' }}">
                         <a href="/game_log">Game Log</a>
                     </li>
                     <li class="js-nav-item {{ isActiveRoute name='leaderboard' }}">
@@ -30,6 +30,11 @@
                     <li class="js-nav-item {{ isActiveRoute name='about' }}">
                         <a href="/about">About</a>
                     </li>
+                    {{#if hasActiveGame currentUser}}
+                    <li class="js-nav-item active-game-highlight">
+                        <a href="/lobby"><b>ACTIVE GAME</b></a>
+                    </li>
+                    {{/if}}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {{> loginButtons}}

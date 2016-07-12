@@ -89,3 +89,7 @@ Template.registerHelper("getUserStatus", function(user) {
 
     return userStatus("Offline", "offline.png");
 });
+
+Template.registerHelper("hasActiveGame", function(user) {
+    return (user && user.profile.invitation_token.current_game);
+});

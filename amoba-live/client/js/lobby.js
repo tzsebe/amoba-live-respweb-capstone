@@ -43,14 +43,20 @@ Template.user_popup_content_adapter.helpers({
 Template.user_popup_content.events({
     'click .js-match-user': function(event) {
         console.log("Challenging " + this._id);
-        Meteor.call('matchUsers', this, function(err, result) {
-            if (err) {
-                handleMeteorException(err);
-            }
 
-            // Always dismiss the modal.
-            $('#user-popup').modal('hide');
-        });
+        // We have to bind the meteor method call to the modal hide like this,
+        // to ensure that it always finishes the hide animation before calling it.
+        // This is because iron:router redirects (which we use for making matches) don't
+        // properly close the dialog.
+        //
+        // The 'this' we're passing along is the userId of theuser we're trying to match up with.
+        $('#user-popup').on('hidden.bs.modal', this, function(event) {
+            Meteor.call('matchUsers', event.data, function(err, result) {
+                if (err) {
+                    handleMeteorException(err);
+                }
+            });
+        }).modal('hide');
     }
 });
 
