@@ -47,3 +47,26 @@ h1 {
     cursor: pointer;
 }
 
+/**
+ * Game details/grid stuff.
+ */
+.game-grid {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 100%;
+    min-width: 768px;
+    padding: 10px;
+}
+
+.grid-cell {
+    /* width: x% - added separately. */
+    float: left;
+    margin: 0;
+    padding: 0;
+    border: 1px solid black;
+}
+
+.grid-cell img {
+    width: 100%;
+}
+

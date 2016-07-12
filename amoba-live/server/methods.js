@@ -74,6 +74,8 @@ Meteor.methods({
                 player1Id: player1Id,
                 player2Id: player2Id,
                 creationDate: new Date(),
+                gridWidth: GRID_WIDTH,
+                gridHeight: GRID_HEIGHT,
                 moves: []
             });
 
