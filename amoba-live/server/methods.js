@@ -109,5 +109,84 @@ Meteor.methods({
             return token;
         }
 
+    },
+
+    /**
+     * This is the main logic that interfaces with the game. A player clicks something to make
+     * a move. This method validates the move, updates the game state as necessary, and closes/tallies
+     * up the game results as needed.
+     *
+     * Input:
+     * - gameId: ID of game being played
+     * - playerId: userId of player making the move
+     * - move: Object representing the move being made
+     *   - coords: object with an x and a y
+     *
+     * Validation:
+     * - Game:
+     *   - Game must still be ongoing/open
+     * - Player:
+     *   - playerId must match current userId
+     *   - it must be playerId's turn
+     * - Game Rules:
+     *   - Must be a valid move (through reconstructing the state)
+     *
+     * Output/behavior:
+     */
+    gameMove: function(gameId, playerId, move) {
+        // Degenerate input validation
+        if (!gameId) {
+            throw new Meteor.Error(400, "Missing gameId.");
+        }
+        if (!playerId) {
+            throw new Meteor.Error(400, "Missing playerId.");
+        }
+        if (!move) {
+            throw new Meteor.Error(400, "Missing move.");
+        }
+
+        console.log("Processing move: gameId [" + gameId + "], playerId [" + playerId + "], move: ", move);
+
+        // Basic input validation
+        if (!Meteor.user()) {
+            throw new Meteor.Error(400, "You must be logged in to perform this action.");
+        }
+        if (Meteor.user()._id != playerId) {
+            throw new Meteor.Error(400, "You are not logged in as the user you claim to be.");
+        }
+        var game = Games.findOne({_id: gameId});
+        if (!game) {
+            throw new Meteor.Error(400, "Game does not exit.");
+        }
+        if (game.endDate) {
+            throw new Meteor.Error(400, "Game is already over.");
+        }
+        if (game.player1Id != playerId && game.player2Id != playerId) {
+            throw new Meteor.Error(400, "You are not a player on this game.");
+        }
+
+        // Check if it's player's turn
+        var playerTurn = game.moves.length % 2 + 1;
+        if (playerTurn == 1 && game.player1Id != playerId || playerTurn == 2 && game.player2Id != playerId) {
+            throw new Meteor.Error(400, "It's not your turn.");
+        }
+
+        // Check if move was passed in.
+        if (!move.coords) {
+            throw new Meteor.Error(400, "No coordinates passed in.");
+        }
+
+        // TODO: At this point, run through the Amoba rules
+
+        // (for now, just allow all moves while testing)
+        Games.update(gameId, {
+            $push: {
+                moves: {
+                    x: move.coords.x,
+                    y: move.coords.y,
+                    moveDate: new Date()
+                }
+            }
+        });
     }
 });

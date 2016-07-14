@@ -97,3 +97,11 @@ hasActiveGame = function(user) {
 Template.registerHelper("hasActiveGame", function(user) {
     return hasActiveGame(user);
 });
+
+Template.registerHelper("cellContent", function(content) {
+    switch (content) {
+        case 1: return "red_500x500.png";
+        case 2: return "blue_500x500.png";
+        default: return "white_500x500.png";
+    }
+});
