@@ -176,9 +176,29 @@ Meteor.methods({
             throw new Meteor.Error(400, "No coordinates passed in.");
         }
 
-        // TODO: At this point, run through the Amoba rules
+        // Replay the entire game up until now, to make sure state is good.
+        var engine = new AmobaEngine(game.gridWidth, game.gridHeight);
 
-        // (for now, just allow all moves while testing)
+        for (var idx = 0; idx < game.moves.length; ++idx) {
+            var internalPlayerId = idx % 2 + 1;
+            try {
+                var result = engine.addMove(internalPlayerId, game.moves[idx].x, game.moves[idx].y);
+                if (result.is_game_over) {
+                    throw new Meteor.Error(400, "GAME OVER!!!!");
+                }
+            } catch (ex) {
+                throw new Meteor.Error(400, "Caught " + ex.name + ": " + ex.message);
+            }
+        }
+
+        // Test the new move on the engine
+        try {
+            engine.addMove(playerTurn, move.coords.x, move.coords.y);
+        } catch (ex) {
+            throw new Meteor.Error(400, "Caught " + ex.name + ": " + ex.message);
+        }
+
+        // TODO: check for outcome....
         Games.update(gameId, {
             $push: {
                 moves: {
