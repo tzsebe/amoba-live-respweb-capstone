@@ -18,18 +18,31 @@ function setCurrentGame(userId, gameId) {
 }
 
 function recordAndResetUser(userId, win, newScore) {
-    Meteor.users.update({_id: userId},
-        {
-            $set: {
-                "profile.invitation_token": {},
-                "profile.score": newScore
-            },
-            $inc: {
-                "profile.games": 1,
-                "profile.wins": win
-            }
+    var operation = {
+        $set: {
+            "profile.invitation_token": {},
+        },
+        $inc: {
+            "profile.games": 1,
+            "profile.wins": win ? 1 : 0
         }
-    );
+    };
+
+    if (newScore != null) {
+        operation["$set"]["profile.score"] = newScore;
+    }
+
+    Meteor.users.update({_id: userId}, operation);
+}
+
+function calculateNewScores(winnerScore, loserScore) {
+    console.log("Old scores: winner = " + winnerScore + ", loser = " + loserScore);
+
+    // TODO: come up with a better way to set the stakes.
+    return {
+        winnerScore: winnerScore + 50,
+        loserScore: loserScore - 50
+    };
 }
 
 Meteor.methods({
@@ -221,6 +234,7 @@ Meteor.methods({
         // Map everything we need to map from the last move (in particular - if it ended the game).
         var outcome = null;
         var winningPlayerId = null;
+        var losingPlayerId = null;
         var endDate = null;
         if (lastMoveResult.is_game_over) {
             if (lastMoveResult.is_draw) {
@@ -230,6 +244,7 @@ Meteor.methods({
                 // Someone won
                 outcome = lastMoveResult.winner == 1 ? 'player1_win' : 'player2_win';
                 winningPlayerId = lastMoveResult.winner == 1 ? game.player1Id : game.player2Id;
+                losingPlayerId = winningPlayerId == game.player1Id ? game.player2Id : game.player1Id;
                 endDate = new Date();
             }
         }
@@ -252,10 +267,22 @@ Meteor.methods({
 
         // Update player statuses
         if (outcome && !game.outcome) {
-            recordAndResetUser(game.player1Id, game.player1Id == winningPlayerId ? 1 : 0, 1000);
-            recordAndResetUser(game.player2Id, game.player2Id == winningPlayerId ? 1 : 0, 1000);
-        }
+            // In case of a draw, don't change scores
+            if (outcome == 'draw') {
+                recordAndResetUser(game.player1Id, game.player1Id == winningPlayerId ? 1 : 0, null);
+                recordAndResetUser(game.player2Id, game.player2Id == winningPlayerId ? 1 : 0, null);
+            } else {
+                // Get the new scores
+                console.log("Looking up scores...");
+                newScores = calculateNewScores(
+                    Meteor.users.findOne({_id: winningPlayerId}).profile.score,
+                    Meteor.users.findOne({_id: losingPlayerId}).profile.score
+                );
+                console.log("New scores: ", newScores);
 
-        // TODO: Update scores
+                recordAndResetUser(winningPlayerId, true, newScores.winnerScore);
+                recordAndResetUser(losingPlayerId, false, newScores.loserScore);
+            }
+        }
     }
 });
