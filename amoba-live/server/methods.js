@@ -17,6 +17,21 @@ function setCurrentGame(userId, gameId) {
     );
 }
 
+function recordAndResetUser(userId, win, newScore) {
+    Meteor.users.update({_id: userId},
+        {
+            $set: {
+                "profile.invitation_token": {},
+                "profile.score": newScore
+            },
+            $inc: {
+                "profile.games": 1,
+                "profile.wins": win
+            }
+        }
+    );
+}
+
 Meteor.methods({
     /**
      * This is the logic that helps match users against one another. When users challenge themselves/accept
@@ -132,6 +147,10 @@ Meteor.methods({
      *   - Must be a valid move (through reconstructing the state)
      *
      * Output/behavior:
+     * - Replay all moves so far
+     * - Add the new move
+     * - If the game is over:
+     *   - Close the game (specify status)
      */
     gameMove: function(gameId, playerId, move) {
         // Degenerate input validation
@@ -192,13 +211,30 @@ Meteor.methods({
         }
 
         // Test the new move on the engine
+        var lastMoveResult = null;
         try {
-            engine.addMove(playerTurn, move.coords.x, move.coords.y);
+            lastMoveResult = engine.addMove(playerTurn, move.coords.x, move.coords.y);
         } catch (ex) {
             throw new Meteor.Error(400, "Caught " + ex.name + ": " + ex.message);
         }
 
-        // TODO: check for outcome....
+        // Map everything we need to map from the last move (in particular - if it ended the game).
+        var outcome = null;
+        var winningPlayerId = null;
+        var endDate = null;
+        if (lastMoveResult.is_game_over) {
+            if (lastMoveResult.is_draw) {
+                // Draw (rare condition)
+                outcome = 'draw';
+            } else {
+                // Someone won
+                outcome = lastMoveResult.winner == 1 ? 'player1_win' : 'player2_win';
+                winningPlayerId = lastMoveResult.winner == 1 ? game.player1Id : game.player2Id;
+                endDate = new Date();
+            }
+        }
+
+        // Update game with latest move.
         Games.update(gameId, {
             $push: {
                 moves: {
@@ -206,7 +242,20 @@ Meteor.methods({
                     y: move.coords.y,
                     moveDate: new Date()
                 }
+            },
+            $set: {
+                winningPlayerId: winningPlayerId,
+                outcome: outcome,
+                endDate: endDate
             }
         });
+
+        // Update player statuses
+        if (outcome && !game.outcome) {
+            recordAndResetUser(game.player1Id, game.player1Id == winningPlayerId ? 1 : 0, 1000);
+            recordAndResetUser(game.player2Id, game.player2Id == winningPlayerId ? 1 : 0, 1000);
+        }
+
+        // TODO: Update scores
     }
 });

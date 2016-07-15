@@ -15,6 +15,7 @@ Games = new Mongo.Collection("games");
  *      - it can be abandoned if there are less than 2 total moves, and the game timed out.
  *  - moves: List of coordinates of moves, in order (player 1 goes first, then player 2, and so on). Also include date.
  *  - gridWidth/gridHeight: Width and height of the playing area for this game.
+ *  - winningPlayerId: PlayerID of the winner.
  */
 Games.attachSchema({
     player1Id: {
@@ -36,6 +37,11 @@ Games.attachSchema({
         type: String,
         optional: true,
         allowedValues: ['player1_win', 'player2_win', 'draw', 'abandoned']
+    },
+    winningPlayerId: {
+        type: String,
+        optional: true,
+        regEx: SimpleSchema.RegEx.Id
     },
     gridWidth: {
         type: Number,
