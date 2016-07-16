@@ -208,6 +208,14 @@ Meteor.methods({
             throw new Meteor.Error(400, "No coordinates passed in.");
         }
 
+        // Check if we're trying to make a move after the expiration timeout.
+        if (game.moves.length >= 2) {
+            var moveTimeoutDate = new Date(game.moves[game.moves.length-1].moveDate.getTime() + 1000 * MOVE_TIME_LIMIT_SECONDS);
+            if (new Date() > moveTimeoutDate) {
+                throw new Meteor.Error(400, "You waited too long - you lose.");
+            }
+        }
+
         // Replay the entire game up until now, to make sure state is good.
         var engine = new AmobaEngine(game.gridWidth, game.gridHeight);
 
