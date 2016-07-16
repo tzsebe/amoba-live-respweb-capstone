@@ -17,34 +17,6 @@ function setCurrentGame(userId, gameId) {
     );
 }
 
-function recordAndResetUser(userId, win, newScore) {
-    var operation = {
-        $set: {
-            "profile.invitation_token": {},
-        },
-        $inc: {
-            "profile.games": 1,
-            "profile.wins": win ? 1 : 0
-        }
-    };
-
-    if (newScore != null) {
-        operation["$set"]["profile.score"] = newScore;
-    }
-
-    Meteor.users.update({_id: userId}, operation);
-}
-
-function calculateNewScores(winnerScore, loserScore) {
-    console.log("Old scores: winner = " + winnerScore + ", loser = " + loserScore);
-
-    // TODO: come up with a better way to set the stakes.
-    return {
-        winnerScore: winnerScore + 50,
-        loserScore: loserScore - 50
-    };
-}
-
 Meteor.methods({
     /**
      * This is the logic that helps match users against one another. When users challenge themselves/accept
@@ -210,7 +182,7 @@ Meteor.methods({
 
         // Check if we're trying to make a move after the expiration timeout.
         if (game.moves.length >= 2) {
-            var moveTimeoutDate = new Date(game.moves[game.moves.length-1].moveDate.getTime() + 1000 * MOVE_TIME_LIMIT_SECONDS);
+            var moveTimeoutDate = getMoveTimeoutDate(game);
             if (new Date() > moveTimeoutDate) {
                 throw new Meteor.Error(400, "You waited too long - you lose.");
             }
@@ -277,20 +249,15 @@ Meteor.methods({
         if (outcome && !game.outcome) {
             // In case of a draw, don't change scores
             if (outcome == 'draw') {
-                recordAndResetUser(game.player1Id, game.player1Id == winningPlayerId ? 1 : 0, null);
-                recordAndResetUser(game.player2Id, game.player2Id == winningPlayerId ? 1 : 0, null);
+                resetPlayersWithDraw(game);
             } else {
-                // Get the new scores
-                console.log("Looking up scores...");
-                newScores = calculateNewScores(
-                    Meteor.users.findOne({_id: winningPlayerId}).profile.score,
-                    Meteor.users.findOne({_id: losingPlayerId}).profile.score
-                );
-                console.log("New scores: ", newScores);
-
-                recordAndResetUser(winningPlayerId, true, newScores.winnerScore);
-                recordAndResetUser(losingPlayerId, false, newScores.loserScore);
+                resetPlayersWithWinner(game, winningPlayerId, losingPlayerId);
             }
+        }
+
+        // Handle move timeout counters as needed.
+        if (!outcome) {
+            registerMoveClock(game._id, game.moves.length + 1);
         }
     }
 });

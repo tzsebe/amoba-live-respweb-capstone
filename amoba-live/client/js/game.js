@@ -100,7 +100,7 @@ Template.game_details.helpers({
                     result.status = "It's your turn";
                     if (game.moves.length >= 2) {
                         result.need_timer = true;
-                        result.move_timeout_date = new Date(game.moves[game.moves.length-1].moveDate.getTime() + 1000 * MOVE_TIME_LIMIT_SECONDS);
+                        result.move_timeout_date = getMoveTimeoutDate(game);
                     }
                 } else {
                     result.status = "It's " + nextPlayer.profile.username + "'s turn";
