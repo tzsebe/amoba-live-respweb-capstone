@@ -59,6 +59,9 @@
     <ul>
         <li>{{#if in_progress}}Game is in progress...{{else}}Game ended on {{end_date}}{{/if}}</li>
         <li>{{status}}</li>
+        {{#if need_timer}}
+        <li>Move Timer: <span id="move-timer" data-expiration="{{dateToEpoch move_timeout_date}}"></span></li>
+        {{/if}}
     </ul>
 </template>
 

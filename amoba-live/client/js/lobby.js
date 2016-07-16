@@ -66,6 +66,7 @@ var invitationExpirationInterval = null;
 Template.invitation_details.onDestroyed(function() {
     if (invitationExpirationInterval) {
         clearInterval(invitationExpirationInterval);
+        invitationExpirationInterval = null;
     }
 });
 

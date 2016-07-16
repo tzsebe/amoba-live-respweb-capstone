@@ -2,6 +2,34 @@
 // Template helpers for game
 //
 
+var moveTimerInterval = null;
+Template.game_status.onDestroyed(function() {
+    if (moveTimerInterval) {
+        clearInterval(moveTimerInterval);
+        moveTimerInterval = null;
+    }
+});
+
+Template.game_status.onRendered(function() {
+    if (moveTimerInterval) {
+        clearInterval(moveTimerInterval);
+    }
+
+    moveTimerInterval = setInterval(function() {
+        $('#move-timer').each(function() {
+            // can't use .data() here, because jQuery doesn't update it dynamically :-(
+            var exp = $(this).attr('data-expiration')
+            var now = new Date().getTime();
+            if (now >= exp) {
+                $(this).text("expired");
+            } else {
+                var diff = Math.floor((exp - now)/1000);
+                $(this).text(diff);
+            }
+        });
+    }, 1000);
+});
+
 Template.game_details.helpers({
     game: function() {
         return this;
@@ -41,6 +69,8 @@ Template.game_details.helpers({
             var player1Name = player1.profile.username;
             var player2Name = player2.profile.username;
 
+            result.need_timer = false;
+
             // Figure out game status
             if (game.outcome) {
                 result.in_progress = false;
@@ -68,6 +98,10 @@ Template.game_details.helpers({
                 var nextPlayer = Meteor.users.findOne({_id: nextPlayerId});
                 if (Meteor.user() && nextPlayerId == Meteor.user()._id) {
                     result.status = "It's your turn";
+                    if (game.moves.length >= 2) {
+                        result.need_timer = true;
+                        result.move_timeout_date = new Date(game.moves[game.moves.length-1].moveDate.getTime() + 1000 * MOVE_TIME_LIMIT_SECONDS);
+                    }
                 } else {
                     result.status = "It's " + nextPlayer.profile.username + "'s turn";
                 }
