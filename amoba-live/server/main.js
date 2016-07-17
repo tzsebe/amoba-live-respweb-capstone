@@ -18,3 +18,10 @@ Meteor.publish('user-data', function() {
 Meteor.publish('game-data', function() {
     return Games.find();
 });
+
+/**
+ * Publish all comment data.
+ */
+Meteor.publish('comment-data', function() {
+    return Comments.find();
+});

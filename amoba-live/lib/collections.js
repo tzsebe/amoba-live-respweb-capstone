@@ -69,3 +69,34 @@ Games.attachSchema({
         type: Date,
     }
 });
+
+/**
+ * Comments: Collection representing comments on a game. A game can have multiple comments
+ *           from multiple users, and they have to be ordered by date when querying.
+ */
+Comments = new Mongo.Collection("comments");
+
+/**
+ * Schema for comments:
+ * - gameId: game id for game the comment is for
+ * - userId: user id of the commenter
+ * - text: Contents of the comment. Must not be empty.
+ * - creationDate: timestamp when comment was created. Comments are immutable. There is no deleting/editing them.
+ */
+Comments.attachSchema({
+    gameId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+    },
+    userId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+    },
+    text: {
+        type: String,
+        min: 1
+    },
+    creationDate: {
+        type: Date
+    }
+});

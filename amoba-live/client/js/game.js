@@ -180,3 +180,46 @@ Template.cell_display.events({
         }
     }
 });
+
+Template.comments.helpers({
+    /**
+     * This is a simple lookup of comments for the game in question.
+     */
+    comments: function() {
+        var game = this;
+
+        if (game && game._id) {
+            return Comments.find({gameId: game._id},
+                                 {sort: {creationDate: -1}});
+        }
+
+        return null;
+    }
+});
+
+Template.comments_form.events({
+    "submit .js-comment-form": function(event) {
+        if (Meteor.user() && event.target.form_comment_text.value.trim()) {
+            var gameId = this._id;
+            var text = event.target.form_comment_text.value.trim();
+
+            // Disable the button before inserting into the collection.
+            $('#form_comment_submit_button').prop("disabled", true);
+
+            Meteor.call('addComment', gameId, text, function(err) {
+                // Display error if any
+                if (err) {
+                    handleMeteorException(err);
+                } else {
+                    // Clear form input
+                    $("#form_comment_text").val("");
+                }
+
+                // Re-enable the post button
+                $("#form_comment_submit_button").prop("disabled", false);
+            });
+        }
+
+        return false;
+    }
+});

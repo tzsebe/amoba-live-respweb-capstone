@@ -262,5 +262,35 @@ Meteor.methods({
         if (!outcome) {
             registerMoveClock(game._id, game.moves.length + 1);
         }
+    },
+
+    /**
+     * Add a comment to a game.
+     */
+    addComment: function(gameId, text) {
+        // Basic input validation
+        if (!gameId) {
+            throw new Meteor.Error(400, "Missing gameId");
+        }
+        if (!text || !text.trim()) {
+            throw new Meteor.Error(400, "Missing text");
+        }
+
+        // Data validation
+        if (!Meteor.user()) {
+            throw new Meteor.Error(400, "You are not logged in.");
+        }
+
+        if (!Games.findOne({_id: gameId})) {
+            throw new Meteor.Error(400, "Game with ID " + gameId + " does not exist.");
+        }
+
+        // All looks good, insert our comment.
+        Comments.insert({
+            gameId: gameId,
+            userId: Meteor.user()._id,
+            text: text.trim(),
+            creationDate: new Date()
+        });
     }
 });

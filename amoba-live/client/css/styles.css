@@ -70,3 +70,11 @@ h1 {
     width: 100%;
 }
 
+.comments-list {
+    list-style: none;
+}
+
+.footnote {
+    font-size: 8pt;
+    font-style: italic;
+}

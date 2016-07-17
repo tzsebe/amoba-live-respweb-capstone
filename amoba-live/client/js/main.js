@@ -4,6 +4,7 @@
 
 Meteor.subscribe("user-data");
 Meteor.subscribe("game-data");
+Meteor.subscribe("comment-data");
 
 
 //

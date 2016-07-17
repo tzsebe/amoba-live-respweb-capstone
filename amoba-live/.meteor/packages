@@ -27,3 +27,4 @@ session
 mrt:bootstrap-alerts
 aldeed:simple-schema
 aldeed:collection2
+copleykj:livestamp
