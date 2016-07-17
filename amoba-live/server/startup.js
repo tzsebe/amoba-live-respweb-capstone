@@ -30,4 +30,14 @@ Meteor.startup(function() {
             });
         }
     }
+
+    // Collect open games. This is extremely inefficient at scale, and we'd need to find a way
+    // to do this with indexes.
+    console.log("Collecting previously-opened games...");
+    Games.find({outcome: null}).forEach(function(game) {
+        registerOpenGame(game._id);
+    });
+
+    // Start the abandoned game reaper interval.
+    startAbandonedGameClock();
 });

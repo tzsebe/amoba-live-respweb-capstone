@@ -15,12 +15,20 @@ resetPlayersWithWinner = function(game, winningPlayerId, losingPlayerId) {
     recordAndResetUser(losingPlayerId, false, newScores.loserScore);
 }
 
-resetPlayersWithDraw = function(game) {
+resetPlayersNoWinner = function(game) {
     recordAndResetUser(game.player1Id, false, null);
     recordAndResetUser(game.player2Id, false, null);
 }
 
-recordAndResetUser = function(userId, win, newScore) {
+function resetUserToken(userId) {
+    Meteor.users.update({_id: userId}, {
+        $set: {
+            "profile.invitation_token": {},
+        }
+    });
+}
+
+function recordAndResetUser(userId, win, newScore) {
     var operation = {
         $set: {
             "profile.invitation_token": {},

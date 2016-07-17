@@ -8,17 +8,15 @@ function timeoutGame(game) {
     var winningPlayerId = game.moves.length % 2 == 0 ? game.player2Id : game.player1Id;
     var losingPlayerId = game.moves.length % 2 == 0 ? game.player1Id : game.player2Id;
 
-    var outcome = winningPlayerId == game.player1Id ? 'player1_win' : 'player2_win';
-
     // Close out the game...
     Games.update(game._id, {
         $set: {
             winningPlayerId: winningPlayerId,
-            outcome: outcome,
+            outcome: 'default',
             endDate: new Date()
         }
     });
-    
+
     // Close out the users and scores.
     resetPlayersWithWinner(game, winningPlayerId, losingPlayerId);
 }
@@ -28,7 +26,9 @@ function handleMoveTimeout(gameId, numMovesLastSeen) {
 
     var game = Games.findOne({_id: gameId});
     if (game) {
-        if (game.moves.length > numMovesLastSeen) {
+        if (game.moves.length < 2) {
+            console.log("Not enough moves to qualify for reaping.");
+        } else if (game.moves.length > numMovesLastSeen) {
             console.log("Number of moves exceeds last seen - move was made in time.");
         } else if (game.moves.length < numMovesLastSeen) {
             console.log("We only have " + game.moves.length + " moves, which is odd. Ignoring.");
@@ -46,6 +46,51 @@ function handleMoveTimeout(gameId, numMovesLastSeen) {
     }
 }
 
+
+var openGames = [];
+function closeAbandonedGames() {
+    console.log("Closing abandoned games, if any.");
+    console.log("Number of open games (start): " + openGames.length);
+    for (var idx = openGames.length-1; idx >= 0; --idx) {
+        console.log("Looking at gameId " + gameId);
+        var gameId = openGames[idx];
+        var game = Games.findOne({_id: gameId});
+        var finished = false;
+        if (game) {
+            if (game.outcome) {
+                // Game already closed on its own, no need to keep tracking it.
+                finished = true;
+                console.log("Game is already done. Ignoring.");
+            } else {
+                // Check if it's been idling
+                var lastActivityDate = game.moves.length > 0 ? game.moves[game.moves.length-1].moveDate : game.creationDate;
+                var expirationDate = new Date(lastActivityDate.getTime() + 1000 * ABAONDONED_TIME_LIMIT_SECONDS);
+                console.log("Last game activity: " + lastActivityDate);
+                console.log("Game expiration date: " + expirationDate);
+                if (new Date() > expirationDate) {
+                    console.log("Game is expired. Closing it.");
+
+                    Games.update(game._id, {
+                        $set: {
+                            outcome: 'abandoned',
+                            endDate: new Date()
+                        }
+                    });
+                    resetPlayersNoWinner(game);
+
+                    finished = true;
+                }
+            }
+        }
+
+        if (finished) {
+            console.log("Removing this game id...");
+            openGames.splice(idx, 1);
+        }
+    }
+    console.log("Number of open games (end): " + openGames.length);
+}
+
 registerMoveClock = function(gameId, numMovesLastSeen) {
     console.log("Registering move for game " + gameId + ", numMovesLastSeen " + numMovesLastSeen + "...");
     Meteor.setTimeout(function() {
@@ -53,3 +98,14 @@ registerMoveClock = function(gameId, numMovesLastSeen) {
     }, 1000 * MOVE_TIME_LIMIT_SECONDS);
 }
 
+registerOpenGame = function(gameId) {
+    openGames.push(gameId);
+}
+
+startAbandonedGameClock = function() {
+    console.log("Registering abandoned game reaper.");
+    closeAbandonedGames();
+    Meteor.setInterval(function() {
+        closeAbandonedGames();
+    }, 1000 * ABANDONED_REAPER_INTERVAL_SECONDS);
+}

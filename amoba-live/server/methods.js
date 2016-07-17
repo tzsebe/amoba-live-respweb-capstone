@@ -86,6 +86,9 @@ Meteor.methods({
             setCurrentGame(player1Id, gameId);
             setCurrentGame(player2Id, gameId);
 
+            // Record open game for reaping.
+            registerOpenGame(gameId);
+
             return null;
         } else {
             // Setup the challenge/invitation
@@ -222,7 +225,7 @@ Meteor.methods({
                 outcome = 'draw';
             } else {
                 // Someone won
-                outcome = lastMoveResult.winner == 1 ? 'player1_win' : 'player2_win';
+                outcome = 'complete';
                 winningPlayerId = lastMoveResult.winner == 1 ? game.player1Id : game.player2Id;
                 losingPlayerId = winningPlayerId == game.player1Id ? game.player2Id : game.player1Id;
                 endDate = new Date();
@@ -249,7 +252,7 @@ Meteor.methods({
         if (outcome && !game.outcome) {
             // In case of a draw, don't change scores
             if (outcome == 'draw') {
-                resetPlayersWithDraw(game);
+                resetPlayersNoWinner(game);
             } else {
                 resetPlayersWithWinner(game, winningPlayerId, losingPlayerId);
             }

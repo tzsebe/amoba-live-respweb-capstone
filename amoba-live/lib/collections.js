@@ -36,7 +36,7 @@ Games.attachSchema({
     outcome: {
         type: String,
         optional: true,
-        allowedValues: ['player1_win', 'player2_win', 'draw', 'abandoned']
+        allowedValues: ['complete', 'default', 'draw', 'abandoned']
     },
     winningPlayerId: {
         type: String,
