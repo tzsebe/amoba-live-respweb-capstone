@@ -24,3 +24,6 @@ ABANDONED_REAPER_INTERVAL_SECONDS = 60;
 // them seamlessly.
 GRID_WIDTH = 20;
 GRID_HEIGHT = 16;
+
+// Page sizes for paginated displays.
+GAME_LOG_PAGE_SIZE = 15;

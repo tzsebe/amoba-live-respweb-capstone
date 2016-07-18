@@ -16,11 +16,18 @@
 </template>
 
 <template name="game_history">
+    <div class="btn-group" role="group">
+        <button type="button" id="prev-button" class="btn btn-default {{#unless gameData.hasPrev}}disabled{{/unless}}">Prev</button>
+        <button type="button" id="next-button" class="btn btn-default {{#unless gameData.hasNext}}disabled{{/unless}}">Next</button>
+    </div>
     <ul class="list-group">
-    {{#each gameData.games}}
+    {{#each $mapped gameData.games}}
+
+        {{#unless $.Session.equals 'game-log-page-size' $index}}
         <li class="list-group-item">
             <a href="game_log/{{_id}}">Game between {{getUserName player1Id}} and {{ getUserName player2Id}}, started {{creationDate}}</a>
         </li>
+        {{/unless}}
     {{else}}
     <p>No results to show.</p>
     {{/each}}
