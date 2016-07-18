@@ -3,34 +3,38 @@
 //
 
 Template.game_history.helpers({
-    games: function() {
+    gameData: function() {
         var filterList = [];
 
-        if (Session.get('game-log-active-games-filter')) {
-            filterList.push({
-                outcome: null
-            });
-        }
+        if (Meteor.user()) {
+            if (Session.get('game-log-active-games-filter')) {
+                filterList.push({
+                    outcome: null
+                });
+            }
 
-        if (Meteor.user() && Session.get('game-log-your-victories-filter')) {
-            filterList.push({
-                winningPlayerId: Meteor.user()._id
-            });
-        }
+            if (Session.get('game-log-your-victories-filter')) {
+                filterList.push({
+                    winningPlayerId: Meteor.user()._id
+                });
+            }
 
 
-        if (Meteor.user() && Session.get('game-log-your-games-filter')) {
-            filterList.push({
-                $or: [
-                    {player1Id: Meteor.user()._id},
-                    {player2Id: Meteor.user()._id}
-                ]
-            });
+            if (Session.get('game-log-your-games-filter')) {
+                filterList.push({
+                    $or: [
+                        {player1Id: Meteor.user()._id},
+                        {player2Id: Meteor.user()._id}
+                    ]
+                });
+            }
         }
 
         var filters = filterList.length > 0 ? {$and: filterList} : {};
 
-        return Games.find(filters, {sort: {creationDate: -1}});
+        return {
+            games: Games.find(filters, {sort: {creationDate: -1}})
+        }
     }
 });
 

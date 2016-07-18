@@ -17,10 +17,12 @@
 
 <template name="game_history">
     <ul class="list-group">
-    {{#each games}}
+    {{#each gameData.games}}
         <li class="list-group-item">
             <a href="game_log/{{_id}}">Game between {{getUserName player1Id}} and {{ getUserName player2Id}}, started {{creationDate}}</a>
         </li>
+    {{else}}
+    <p>No results to show.</p>
     {{/each}}
     </ul>
 </template>
