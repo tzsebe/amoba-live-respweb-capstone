@@ -9,7 +9,7 @@ if (Meteor.isClient) {
      * Client-side (ui) account-creation stuff.
      */
     Accounts.ui.config({
-        passwordSignupFields: "USERNAME_AND_EMAIL"
+        passwordSignupFields: "USERNAME_ONLY"
     });
 
     /**
