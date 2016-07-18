@@ -4,7 +4,12 @@
             <li>Game Log</li>
         </ol>
         <h2>Game Log</h2>
-        <p>(TODO: text and filters)</p>
+        <div class="btn-group" role="group">
+            <button type="button" data-filtername="game-log-active-games-filter" class="js-game-log-filter btn btn-default {{filterButtonState 'game-log-active-games-filter'}}">Active Games</button>
+            <button type="button" data-filtername="game-log-your-games-filter" class="js-game-log-filter btn btn-default {{filterButtonState 'game-log-your-games-filter'}}">Your Games</button>
+            <button type="button" data-filtername="game-log-your-victories-filter" class="js-game-log-filter btn btn-default {{filterButtonState 'game-log-your-victories-filter'}}">Your Victories</button>
+        </div>
+        <hr />
 
         {{> game_history}}
     </div>

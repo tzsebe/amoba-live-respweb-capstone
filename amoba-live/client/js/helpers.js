@@ -105,3 +105,13 @@ Template.registerHelper("cellContent", function(content) {
         default: return "white_500x500.png";
     }
 });
+
+Template.registerHelper("filterButtonState", function(filterName) {
+    if (!Meteor.user()) {
+        return "disabled";
+    } else if (Session.get(filterName)) {
+        return "active";
+    } else {
+        return "";
+    }
+});
