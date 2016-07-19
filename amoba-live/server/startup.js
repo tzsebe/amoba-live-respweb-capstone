@@ -60,7 +60,7 @@ function insertRandomGames(numGames, userIds) {
     for (var n = 0; n < numGames; ++n) {
         // Pick two users
         var idx1 = randomN(20);
-        var idx2 = (idx1 + randomN(19)) % 20;
+        var idx2 = (idx1 + 1 + randomN(18)) % 20;
         var player1Id = userIds[idx1];
         var player2Id = userIds[idx2];
 
@@ -89,5 +89,21 @@ function insertRandomGames(numGames, userIds) {
         }
 
         Games.insert(game);
+
+        // Update users to reflect victories
+        Meteor.users.update({_id: player1Id}, {
+            $inc: {
+                "profile.games": 1,
+                "profile.wins": 1,
+                "profile.score": 50
+            }
+        });
+        Meteor.users.update({_id: player2Id}, {
+            $inc: {
+                "profile.games": 1,
+                "profile.wins": 0,
+                "profile.score": -50
+            }
+        });
     }
 }
