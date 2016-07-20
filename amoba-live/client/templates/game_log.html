@@ -17,8 +17,8 @@
 
 <template name="game_history">
     <div class="btn-group" role="group">
-        <button type="button" id="prev-button" class="btn btn-default {{#unless gameData.hasPrev}}disabled{{/unless}}">Prev</button>
-        <button type="button" id="next-button" class="btn btn-default {{#unless gameData.hasNext}}disabled{{/unless}}">Next</button>
+        <button type="button" id="game-log-prev-button" class="btn btn-default {{#unless gameData.hasPrev}}disabled{{/unless}}">Prev</button>
+        <button type="button" id="game-log-next-button" class="btn btn-default {{#unless gameData.hasNext}}disabled{{/unless}}">Next</button>
     </div>
     <ul class="list-group">
     {{#each $mapped gameData.games}}

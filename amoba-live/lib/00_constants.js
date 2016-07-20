@@ -27,3 +27,4 @@ GRID_HEIGHT = 16;
 
 // Page sizes for paginated displays.
 GAME_LOG_PAGE_SIZE = 15;
+LEADERBOARD_PAGE_SIZE = 15;

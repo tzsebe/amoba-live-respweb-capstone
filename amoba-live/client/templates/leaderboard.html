@@ -1,6 +1,20 @@
 <template name="leaderboard">
     <div class="container">
         <h2>Leaderboard</h2>
-        <p>TODO</p>
+        <p>See the top players, by score!</p>
+
+        <div class="btn-group" role="group">
+            <button type="button" id="leaderboard-prev-button" class="btn btn-default {{#unless userData.hasPrev}}disabled{{/unless}}">Prev</button>
+            <button type="button" id="leaderboard-next-button" class="btn btn-default {{#unless userData.hasNext}}disabled{{/unless}}">Next</button>
+        </div>
+        <ul class="list-group">
+        {{#each $mapped userData.users}}
+            {{#unless $.Session.equals 'leaderboard-page-size' $index}}
+            <li class="list-group-item">
+                {{profile.username}}, wins: {{profile.wins}}/{{profile.games}}, Score: {{profile.score}}
+            </li>
+            {{/unless}}
+        {{/each}}
+        </ul>
     </div>
 </template>
