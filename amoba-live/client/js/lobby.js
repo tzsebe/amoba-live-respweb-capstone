@@ -2,7 +2,7 @@
 // Template helpers for lobby
 //
 
-var LOBBY_SKIPPED_RESULTS_KEY = 'lobby-skipped-results';
+var LOBBY_USERS_SKIPPED_RESULTS_KEY = 'lobby-skipped-results';
 var LOBBY_USER_PREFIX_FILTER_KEY = 'lobby-user-prefix-filter';
 
 Template.lobby.helpers({
@@ -20,6 +20,12 @@ Template.browse_users.onRendered(function() {
     if (Meteor.user() && Session.get(LOBBY_USER_PREFIX_FILTER_KEY)) {
         $("#user-prefix-filter").val(Session.get(LOBBY_USER_PREFIX_FILTER_KEY));
     }
+
+    if (Session.get(LOBBY_USERS_SKIPPED_RESULTS_KEY) == null) {
+        Session.set(LOBBY_USERS_SKIPPED_RESULTS_KEY, 0);
+    }
+
+    Session.set('lobby-users-page-size', LOBBY_USERS_PAGE_SIZE);
 });
 
 Template.browse_users.helpers({
@@ -42,11 +48,16 @@ Template.browse_users.helpers({
 
         var filters = filterList.length > 0 ? {$and: filterList} : {};
 
-        // TODO: pagination
-        var usersCursor = Meteor.users.find(filters, {sort: {'profile.username': 1}});
+        var usersCursor = Meteor.users.find(filters, {
+            sort: {'profile.username': 1},
+            limit: LOBBY_USERS_PAGE_SIZE+1,
+            skip: Session.get(LOBBY_USERS_SKIPPED_RESULTS_KEY)
+        });
 
         return {
-            users: usersCursor
+            users: usersCursor,
+            hasPrev: Session.get(LOBBY_USERS_SKIPPED_RESULTS_KEY),
+            hasNext: usersCursor.count() > LOBBY_USERS_PAGE_SIZE
         };
     }
 });
@@ -67,7 +78,7 @@ Template.browse_users.events({
             Session.set(filterName, !Session.get(filterName));
 
             // Reset pagination
-            Session.set(LOBBY_SKIPPED_RESULTS_KEY, 0);
+            Session.set(LOBBY_USERS_SKIPPED_RESULTS_KEY, 0);
         }
     },
 
@@ -85,8 +96,21 @@ Template.browse_users.events({
                 } else {
                     Session.set(LOBBY_USER_PREFIX_FILTER_KEY, val);
                 }
+
+                // Reset pagination
+                Session.set(LOBBY_USERS_SKIPPED_RESULTS_KEY, 0);
             }
         }, 500);
+    },
+
+    'click #lobby-users-prev-button': function(event) {
+        var skip = Session.get(LOBBY_USERS_SKIPPED_RESULTS_KEY);
+        Session.set(LOBBY_USERS_SKIPPED_RESULTS_KEY, skip > LOBBY_USERS_PAGE_SIZE ? skip - LOBBY_USERS_PAGE_SIZE : 0);
+    },
+
+    'click #lobby-users-next-button': function(event) {
+        var skip = Session.get(LOBBY_USERS_SKIPPED_RESULTS_KEY);
+        Session.set(LOBBY_USERS_SKIPPED_RESULTS_KEY, skip + LOBBY_USERS_PAGE_SIZE);
     }
 });
 

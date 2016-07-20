@@ -95,13 +95,14 @@
     </div>
     <hr />
     <div class="btn-group" role="group">
-        <button type="button" id="lobby-prev-button" class="btn btn-default btn-sm {{#unless userData.hasPrev}}disabled{{/unless}}">Prev</button>
-        <button type="button" id="lobby-next-button" class="btn btn-default btn-sm {{#unless userData.hasNext}}disabled{{/unless}}">Next</button>
+        <button type="button" id="lobby-users-prev-button" class="btn btn-default btn-sm {{#unless userData.hasPrev}}disabled{{/unless}}">Prev</button>
+        <button type="button" id="lobby-users-next-button" class="btn btn-default btn-sm {{#unless userData.hasNext}}disabled{{/unless}}">Next</button>
     </div>
 
     <!-- Display list of users -->
     <div class="row">
-    {{#each userData.users}}
+    {{#each $mapped userData.users}}
+        {{#unless $.Session.equals 'lobby-users-page-size' $index}}
         <div class="col-md-2 col-sm-4 col-xs-6">
             <a href="#" class="no-underline js-browse-user" data-toggle="modal" data-target="#user-popup">
                 <div class="browse-users-item">
@@ -112,6 +113,9 @@
                 </div>
             </a>
         </div>
+        {{/unless}}
+    {{else}}
+    <p>No users to show.</p>
     {{/each}}
     </div>
 
