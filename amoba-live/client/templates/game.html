@@ -76,7 +76,7 @@
 
 <template name="cell_display">
     <div class="grid-cell {{#if isPlayerTurn}}js-clickable-grid-cell{{/if}}" style="width: {{cellWidthStyle}}" data-x="{{x}}" data-y="{{y}}" data-gameId="{{gameId}}">
-        <img src="/grid_icons/{{cellContent content}}">
+        <img src="/grid_icons/{{cellContent content isWinningCell}}">
     </div>
 </template>
 

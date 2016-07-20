@@ -137,20 +137,41 @@ Template.game_details.helpers({
                     y: y,
                     cellWidthStyle: cellWidthStyle,
                     content: 0,
-                    isPlayerTurn: !game.outcome && Meteor.user() && nextPlayerTurnId == Meteor.user()._id
+                    isPlayerTurn: !game.outcome && Meteor.user() && nextPlayerTurnId == Meteor.user()._id,
+                    isWinningCell: false
                 });
             }
 
-            // Populate cells with game moves
+            // Populate cells with game moves, while replaying the game behind the scenes.
+            var engine = new AmobaEngine(w, h);
             for (var idx = 0; idx < numMoves; ++idx) {
                 var move = game.moves[idx];
                 var playerTurn = idx % 2 + 1;
-                var cellIdx = move.y * game.gridWidth + move.x;
+                var cellIdx = move.y * w + move.x;
 
                 cells[cellIdx].x = move.x;
                 cells[cellIdx].y = move.y;
                 cells[cellIdx].content = playerTurn;
                 cells[cellIdx].isPlayerTurn = false; // already-played cells should not be clickable.
+
+                // Replay the game so far internally
+                try {
+                    engine.addMove(playerTurn, move.x, move.y);
+                } catch (ex) {
+                    console.log("Caught " + ex.name + ": " + ex.message);
+                }
+            }
+
+            // If the game is fully over, mark 5 winning cells for display.
+            var gameState = engine.getState();
+            if (gameState.winning_coords) {
+                for (var idx = 0; idx < gameState.winning_coords.length; ++idx) {
+                    var x = gameState.winning_coords[idx].x;
+                    var y = gameState.winning_coords[idx].y;
+
+                    var cellIdx = y * w + x;
+                    cells[cellIdx].isWinningCell = true;
+                }
             }
 
             return cells;

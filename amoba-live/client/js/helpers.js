@@ -98,10 +98,10 @@ Template.registerHelper("hasActiveGame", function(user) {
     return hasActiveGame(user);
 });
 
-Template.registerHelper("cellContent", function(content) {
+Template.registerHelper("cellContent", function(content, isWinningCell) {
     switch (content) {
-        case 1: return "red_500x500.png";
-        case 2: return "blue_500x500.png";
+        case 1: return isWinningCell ? "red_wins_500x500.png" : "red_500x500.png";
+        case 2: return isWinningCell ? "blue_wins_500x500.png" : "blue_500x500.png";
         default: return "white_500x500.png";
     }
 });
