@@ -4,8 +4,8 @@
         <p>See the top players, by score!</p>
 
         <div class="btn-group" role="group">
-            <button type="button" id="leaderboard-prev-button" class="btn btn-default {{#unless userData.hasPrev}}disabled{{/unless}}">Prev</button>
-            <button type="button" id="leaderboard-next-button" class="btn btn-default {{#unless userData.hasNext}}disabled{{/unless}}">Next</button>
+            <button type="button" id="leaderboard-prev-button" class="btn btn-default btn-sm {{#unless userData.hasPrev}}disabled{{/unless}}">Prev</button>
+            <button type="button" id="leaderboard-next-button" class="btn btn-default btn-sm {{#unless userData.hasNext}}disabled{{/unless}}">Next</button>
         </div>
         <ul class="list-group">
         {{#each $mapped userData.users}}
