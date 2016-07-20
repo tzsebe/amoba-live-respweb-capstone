@@ -2,6 +2,9 @@
 // Template helpers for lobby
 //
 
+var LOBBY_SKIPPED_RESULTS_KEY = 'lobby-skipped-results';
+var LOBBY_USER_PREFIX_FILTER_KEY = 'lobby-user-prefix-filter';
+
 Template.lobby.helpers({
     profile: function() {
         if (Meteor.user()) {
@@ -12,13 +15,43 @@ Template.lobby.helpers({
     }
 });
 
-Template.browse_users.helpers({
-    users: function() {
-        // TODO: pagination and filtering
-        return Meteor.users.find({}, {sort: {'profile.username': 1}});
+Template.browse_users.onRendered(function() {
+    // Don't lose our display of the filter we typed in.
+    if (Meteor.user() && Session.get(LOBBY_USER_PREFIX_FILTER_KEY)) {
+        $("#user-prefix-filter").val(Session.get(LOBBY_USER_PREFIX_FILTER_KEY));
     }
 });
 
+Template.browse_users.helpers({
+    userData: function() {
+        var filterList = [];
+
+        if (Meteor.user()) {
+            if (Session.get('lobby-online-only-filter')) {
+                filterList.push({
+                    'status.online': true
+                });
+            }
+
+            if (Session.get(LOBBY_USER_PREFIX_FILTER_KEY)) {
+                filterList.push({
+                    'profile.username': new RegExp("^" + Session.get(LOBBY_USER_PREFIX_FILTER_KEY) + ".*")
+                });
+            }
+        }
+
+        var filters = filterList.length > 0 ? {$and: filterList} : {};
+
+        // TODO: pagination
+        var usersCursor = Meteor.users.find(filters, {sort: {'profile.username': 1}});
+
+        return {
+            users: usersCursor
+        };
+    }
+});
+
+var typingTimerHandle = null;
 Template.browse_users.events({
     'click .js-browse-user': function(event) {
         if (Meteor.user()) {
@@ -26,6 +59,34 @@ Template.browse_users.events({
             // the template we clicked in.
             Session.set('challenge-user-profile', this);
         }
+    },
+
+    'click .js-lobby-filter': function(event) {
+        var filterName = $(event.target).data("filtername");
+        if (Meteor.user()) {
+            Session.set(filterName, !Session.get(filterName));
+
+            // Reset pagination
+            Session.set(LOBBY_SKIPPED_RESULTS_KEY, 0);
+        }
+    },
+
+    'keyup #user-prefix-filter': function(event) {
+        // Add a debounce, so we can get the event only after the user stops typing.
+        if (typingTimerHandle) {
+            clearTimeout(typingTimerHandle);
+        }
+
+        typingTimerHandle = setTimeout(function() {
+            if (Meteor.user()) {
+                var val = $("#user-prefix-filter").val().trim();
+                if (!val) {
+                    Session.set(LOBBY_USER_PREFIX_FILTER_KEY, null);
+                } else {
+                    Session.set(LOBBY_USER_PREFIX_FILTER_KEY, val);
+                }
+            }
+        }, 500);
     }
 });
 

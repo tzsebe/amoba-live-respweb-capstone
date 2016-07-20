@@ -89,9 +89,19 @@
 <template name="browse_users">
     <h3>Browse Users</h3>
 
+    <div class="input-group" role="toolbar">
+        <button type="button" data-filtername="lobby-online-only-filter" class="js-lobby-filter btn btn-default btn-sm {{filterButtonState 'lobby-online-only-filter'}}">Online Only</button>
+        <input type="text" id="user-prefix-filter" style="margin-left: 10px" placeholder="username prefix...">
+    </div>
+    <hr />
+    <div class="btn-group" role="group">
+        <button type="button" id="lobby-prev-button" class="btn btn-default btn-sm {{#unless userData.hasPrev}}disabled{{/unless}}">Prev</button>
+        <button type="button" id="lobby-next-button" class="btn btn-default btn-sm {{#unless userData.hasNext}}disabled{{/unless}}">Next</button>
+    </div>
+
     <!-- Display list of users -->
     <div class="row">
-    {{#each users}}
+    {{#each userData.users}}
         <div class="col-md-2 col-sm-4 col-xs-6">
             <a href="#" class="no-underline js-browse-user" data-toggle="modal" data-target="#user-popup">
                 <div class="browse-users-item">
