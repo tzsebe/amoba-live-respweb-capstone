@@ -1,6 +1,21 @@
 <template name="about">
     <div class="container">
         <h2>About This Site</h2>
-        <p>TODO</p>
+
+        <h3>Site-Specific</h3>
+        <p>This site is built using Meteor.js, and is a project for one of the classes in Coursera's <i>Responsive Website Development and Design</i> specialization.</p>
+        <p>The general goal of this project is to showcase our full stack web development learnings by building a full system, end-to-end, in Meteor.js.</p>
+        <p>I have chosen to build an online, 2-player Am&#337;ba game, with some minor social elements built in. This is a large enough chunk of work to more than qualify for the complexity required for this Capstone.</p>
+
+        <h3>Things I would do, given more time</h3>
+        <p>Here are some things I would have loved to get into, but won't have time within the scope of the project.</p>
+
+        <ul>
+            <li>Build a 1-player version, where players can play against an AI.</li>
+            <li>Have a better way to adjust scores. Right now, we just subtract 50 points from the loser, and add 50 points to the winner. Ideally, the larger the gap, the higher the stakes. While it's easy to come up with a simple approach that scales the score adjustment based on the size of the existing gap, you also have to think about things like incentivizing higher-scoring players to play the lower-scoring players. This would result in uneven point distribution based on players, and could allow players to collude and build up their scores by taking turns losing to one another.</li>
+            <li>Expanding the social element. In this kind of environment, it makes sense to allow people to add users to their friend lists, send private messages, etc.</li>
+            <li>Better method synchronization: Since only one instance of a method can run at a time, this system would actually get really slow at scale, with thousands of games going on at a time. This probably wouldn't be a huge issue until much later, but it would be nice if 'gameMove' were allowed to run in parallel for multiple games, and synchronizing on individual games, rather than overall. This could be a lot of work, and is just not worth exploring at this time.</li>
+            <li>Infinite Board: Right now, we limit the size of the board to a predefined grid. Ideally, this would actually be an unlimited grid, growing as needed, and as the game advances. I've decided this would be too much work to add for this initial iteration, but if I were to launch this into the real world, I most likely would add support for it.</li>
+        </ul>
     </div>
 </template>

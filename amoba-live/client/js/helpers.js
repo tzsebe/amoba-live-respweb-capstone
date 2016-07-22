@@ -106,8 +106,8 @@ Template.registerHelper("cellContent", function(content, isWinningCell) {
     }
 });
 
-Template.registerHelper("filterButtonState", function(filterName) {
-    if (!Meteor.user()) {
+Template.registerHelper("filterButtonState", function(filterName, allowOffline) {
+    if (!Meteor.user() && allowOffline != true) {
         return "disabled";
     } else if (Session.get(filterName)) {
         return "active";

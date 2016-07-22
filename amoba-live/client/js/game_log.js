@@ -16,12 +16,13 @@ Template.game_history.helpers({
     gameData: function() {
         var filterList = [];
 
+        if (Session.get('game-log-active-games-filter')) {
+            filterList.push({
+                outcome: null
+            });
+        }
+
         if (Meteor.user()) {
-            if (Session.get('game-log-active-games-filter')) {
-                filterList.push({
-                    outcome: null
-                });
-            }
 
             if (Session.get('game-log-your-victories-filter')) {
                 filterList.push({
@@ -60,12 +61,10 @@ Template.game_history.helpers({
 Template.game_log.events({
     "click .js-game-log-filter": function(event) {
         var filterName = $(event.target).data("filtername");
-        if (Meteor.user()) {
-            Session.set(filterName, !Session.get(filterName));
+        Session.set(filterName, !Session.get(filterName));
 
-            // Reset pagination
-            Session.set(GAME_LOG_SKIPPED_RESULTS_KEY, 0);
-        }
+        // Reset pagination
+        Session.set(GAME_LOG_SKIPPED_RESULTS_KEY, 0);
     },
 
     "click #game-log-prev-button": function(event) {

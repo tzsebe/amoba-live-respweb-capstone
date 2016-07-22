@@ -64,7 +64,7 @@ function closeAbandonedGames() {
             } else {
                 // Check if it's been idling
                 var lastActivityDate = game.moves.length > 0 ? game.moves[game.moves.length-1].moveDate : game.creationDate;
-                var expirationDate = new Date(lastActivityDate.getTime() + 1000 * ABAONDONED_TIME_LIMIT_SECONDS);
+                var expirationDate = new Date(lastActivityDate.getTime() + 1000 * ABANDONED_TIME_LIMIT_SECONDS);
                 console.log("Last game activity: " + lastActivityDate);
                 console.log("Game expiration date: " + expirationDate);
                 if (new Date() > expirationDate) {

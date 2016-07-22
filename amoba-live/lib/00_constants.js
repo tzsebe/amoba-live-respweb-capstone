@@ -13,7 +13,7 @@ MOVE_TIME_LIMIT_SECONDS = 30;
 
 
 // How long a game has to be idle to be considered abandoned.
-ABAONDONED_TIME_LIMIT_SECONDS = 300;
+ABANDONED_TIME_LIMIT_SECONDS = 300;
 
 // Interval the abandoned reaper runs on.
 ABANDONED_REAPER_INTERVAL_SECONDS = 60;

@@ -50,3 +50,7 @@ http://adiumxtras.com/index.php?a=xtras&xtra_id=2246
 For this, I just google-imaged, and ended up grabbing the pic from:
 
 https://infoc.eet.bme.hu
+
+## AmobaEngine.js
+
+The javascript game engine (AmobaEngine.js) was built by me, from scratch, and is freely available to anyone who wants to grab it.
