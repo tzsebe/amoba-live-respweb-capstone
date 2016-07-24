@@ -64,9 +64,6 @@ AmobaEngine = function(gridWidth, gridHeight) {
      * if winner is nonzero, a list of coordinates with the winning move.
      *
      * Will throw exceptions for any invalid calls.
-     *
-     * TODO: implement winner detection
-     * TODO: implement draw detection
      */
     this.addMove = function(player, x, y) {
         // Validate inputs

@@ -4,30 +4,32 @@
             <li><a href="/game_log">Game Log</a></li>
             <li>Game Details</li>
         </ol>
-        <h2>Game Details</h2>
 
         <!-- Player Info and Game Status -->
         <div class="row">
+            <!-- Player Info -->
             <div class="col-md-6 col-xs-12">
-                <h3>Player Info</h3>
-                <ul>
-                    <li>
-                        <b>PLAYER 1</b>
-                        {{#with playerInfo.player1}}
-                        {{> user_info_display}}
-                        {{/with}}
-                    </li>
-                    <li>
-                        <b>PLAYER 2</b>
-                        {{#with playerInfo.player2}}
-                        {{> user_info_display}}
-                        {{/with}}
-                    </li>
-                </ul>
+                <div class="row game-user-info-row">
+                    <div class="col-md-4">
+                    {{#with playerInfo.player1}}
+                    {{> user_info_display}}
+                    {{/with}}
+                    </div>
 
+                    <div class="col-md-1 game-user-info-vs">
+                        VS
+                    </div>
+
+                    <div class="col-md-4">
+                    {{#with playerInfo.player2}}
+                    {{> user_info_display}}
+                    {{/with}}
+                    </div>
+                </div>
             </div>
+
+            <!-- Game status -->
             <div class="col-md-6 col-xs-12">
-                <h3>Game Status</h3>
                 {{#with gameStatus}}
                 {{> game_status}}
                 {{/with}}
@@ -35,7 +37,6 @@
         </div>
 
         <!-- Game board -->
-        <h3>Game Board</h3>
         <div class="row">
             <div class="col-lg-12 game-grid">
                 {{#each cells}}
@@ -55,13 +56,10 @@
 </template>
 
 <template name="user_info_display">
-    <ul>
-        <li><b>Avatar:</b> {{ profile.avatar }}</li>
-        <li><b>Username:</b> {{ profile.username }}</li>
-        <li><b>Score:</b> {{ profile.score }}</li>
-        <li><b>Games Played:</b> {{ profile.games }}</li>
-        <li><b>Wins:</b> {{ profile.wins }}</li>
-    </ul>
+   <span class="game-user-info-details">
+       <img src="/avatars/{{profile.avatar}}" title="{{profile.username}}">
+       {{profile.username}}{{#if isMyUser this}} [YOU]{{/if}}
+   </span>
 </template>
 
 <template name="game_status">
@@ -69,6 +67,7 @@
         <li>{{#if in_progress}}Game is in progress...{{else}}Game ended on {{end_date}}{{/if}}</li>
         <li>{{status}}</li>
         {{#if need_timer}}
+        <!-- TODO: style timer properly. -->
         <li>Move Timer: <span id="move-timer" data-expiration="{{dateToEpoch move_timeout_date}}"></span></li>
         {{/if}}
     </ul>

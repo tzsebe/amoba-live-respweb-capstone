@@ -4,6 +4,7 @@
             <li>Game Log</li>
         </ol>
         <h2>Game Log</h2>
+        <!-- TODO: add user search text filter -->
         <div class="btn-group" role="group">
             <button type="button" data-filtername="game-log-active-games-filter" class="js-game-log-filter btn btn-default btn-sm {{filterButtonState 'game-log-active-games-filter' true}}">Active Games</button>
             <button type="button" data-filtername="game-log-your-games-filter" class="js-game-log-filter btn btn-default btn-sm {{filterButtonState 'game-log-your-games-filter'}}">Your Games</button>
@@ -16,20 +17,28 @@
 </template>
 
 <template name="game_history">
-    <div class="btn-group" role="group">
-        <button type="button" id="game-log-prev-button" class="btn btn-default btn-sm {{#unless gameData.hasPrev}}disabled{{/unless}}">Prev</button>
-        <button type="button" id="game-log-next-button" class="btn btn-default btn-sm {{#unless gameData.hasNext}}disabled{{/unless}}">Next</button>
-    </div>
-    <ul class="list-group">
-    {{#each $mapped gameData.games}}
+    <div class="row">
+        <div class="col-lg-offset-2 col-lg-8">
+            <div class="btn-group" role="group">
+                <button type="button" id="game-log-prev-button" class="btn btn-default btn-sm {{#unless gameData.hasPrev}}disabled{{/unless}}">Prev</button>
+                <button type="button" id="game-log-next-button" class="btn btn-default btn-sm {{#unless gameData.hasNext}}disabled{{/unless}}">Next</button>
+            </div>
 
-        {{#unless $.Session.equals 'game-log-page-size' $index}}
-        <li class="list-group-item">
-            <a href="game_log/{{_id}}">Game between {{getUserName player1Id}} and {{ getUserName player2Id}}, started {{creationDate}}</a>
-        </li>
-        {{/unless}}
-    {{else}}
-    <p>No results to show.</p>
-    {{/each}}
-    </ul>
+            <ul class="list-group">
+            {{#each $mapped gameData.games}}
+
+                {{#unless $.Session.equals 'game-log-page-size' $index}}
+                <li class="list-group-item">
+                    <a href="game_log/{{_id}}">
+                        {{getUserName player1Id}} vs {{ getUserName player2Id}}
+                        <span class="footnote"><abbr title="{{creationDate}}">{{livestamp creationDate}}</abbr></span>
+                    </a>
+                </li>
+                {{/unless}}
+            {{else}}
+            <p>No results to show.</p>
+            {{/each}}
+            </ul>
+        </div>
+    </div>
 </template>

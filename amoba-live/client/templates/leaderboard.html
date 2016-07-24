@@ -3,18 +3,33 @@
         <h2>Leaderboard</h2>
         <p>See the top players, by score!</p>
 
-        <div class="btn-group" role="group">
-            <button type="button" id="leaderboard-prev-button" class="btn btn-default btn-sm {{#unless userData.hasPrev}}disabled{{/unless}}">Prev</button>
-            <button type="button" id="leaderboard-next-button" class="btn btn-default btn-sm {{#unless userData.hasNext}}disabled{{/unless}}">Next</button>
+        <div class="row">
+            <div class="col-lg-offset-2 col-lg-8">
+                <div class="btn-group" role="group">
+                    <button type="button" id="leaderboard-prev-button" class="btn btn-default btn-sm {{#unless userData.hasPrev}}disabled{{/unless}}">Prev</button>
+                    <button type="button" id="leaderboard-next-button" class="btn btn-default btn-sm {{#unless userData.hasNext}}disabled{{/unless}}">Next</button>
+                </div>
+                <ul class="list-group">
+                {{#each $mapped userData.users}}
+                    {{#unless $.Session.equals 'leaderboard-page-size' $index}}
+                    <li class="list-group-item leaderboard-item">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <b>{{profile.username}}</b>
+                                <br>
+                                <img src="/avatars/{{profile.avatar}}" title="{{profile.username}}" class="leaderboard-avatar">
+                            </div>
+                            <div class="col-md-3">
+                                wins: {{profile.wins}}/{{profile.games}}
+                                <br>
+                                Score: {{profile.score}}
+                            </div>
+                        </div>
+                    </li>
+                    {{/unless}}
+                {{/each}}
+                </ul>
+            </div>
         </div>
-        <ul class="list-group">
-        {{#each $mapped userData.users}}
-            {{#unless $.Session.equals 'leaderboard-page-size' $index}}
-            <li class="list-group-item">
-                {{profile.username}}, wins: {{profile.wins}}/{{profile.games}}, Score: {{profile.score}}
-            </li>
-            {{/unless}}
-        {{/each}}
-        </ul>
     </div>
 </template>

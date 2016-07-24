@@ -50,6 +50,7 @@ calculateNewScores = function(winnerScore, loserScore) {
     console.log("Old scores: winner = " + winnerScore + ", loser = " + loserScore);
 
     // TODO: come up with a better way to set the stakes.
+    // TODO: start people off with score of zero, and add the 1000 after the first game.
     return {
         winnerScore: winnerScore + 50,
         loserScore: loserScore - 50

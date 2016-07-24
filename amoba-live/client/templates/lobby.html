@@ -35,14 +35,21 @@
 
 <!-- User profile, including picture. Re-usable, both to show your own status, and that of other users. -->
 <template name="user_profile">
-    <h3>{{ profile.username }} {{#with getUserStatus this}}{{> user_status_icon}}{{/with}}</h3>
-    <ul>
-        <li><b>Avatar:</b> {{ profile.avatar }}</li>
-        <li><b>Username:</b> {{ profile.username }}</li>
-        <li><b>Score:</b> {{ profile.score }}</li>
-        <li><b>Games Played:</b> {{ profile.games }}</li>
-        <li><b>Wins:</b> {{ profile.wins }}</li>
-    </ul>
+    <div class="user-profile">
+        <h3>{{ profile.username }} {{#with getUserStatus this}}{{> user_status_icon}}{{/with}}</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <img src="/avatars/{{ profile.avatar }}" title="{{ profile.username }}" class="user-profile-img">
+            </div>
+            <div class="col-md-8">
+                <ul class="list-group">
+                    <li class="list-group-item"><b>Score:</b> {{ profile.score }}</li>
+                    <li class="list-group-item"><b>Games Played:</b> {{ profile.games }}</li>
+                    <li class="list-group-item"><b>Wins:</b> {{ profile.wins }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </template>
 
 <!-- Game invitation info (your token and invitations sent to you) -->

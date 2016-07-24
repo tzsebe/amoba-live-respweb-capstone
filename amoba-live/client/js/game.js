@@ -76,6 +76,8 @@ Template.game_details.helpers({
                 result.in_progress = false;
                 result.end_date = game.endDate;
 
+                // TODO: layer of indirection here, to help properly display
+                // the status of the game (draw, win by default, win by actual win, in progress, etc.)
                 if (game.outcome == 'draw') {
                     result.status = "Game is a draw";
                 } else if (game.outcome == 'abandoned') {
