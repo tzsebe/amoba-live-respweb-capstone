@@ -14,6 +14,11 @@ h1 {
     background: green;
 }
 
+.incoming-challenge-highlight {
+    background: darkgoldenrod;
+}
+
+
 .footnote {
     font-size: 8pt;
     font-style: italic;
@@ -145,11 +150,11 @@ h1 {
  */
 
 .leaderboard-item {
-    font-size: 15pt;
+    font-size: 13pt;
 }
 
 .leaderboard-avatar {
-    width: 100%;
+    width: 75%;
     border-radius: 5px;
 }
 

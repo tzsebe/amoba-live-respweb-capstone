@@ -3,8 +3,14 @@
 //
 
 var GAME_LOG_SKIPPED_RESULTS_KEY = 'game-log-skipped-results';
+var GAME_LOG_USER_PREFIX_FILTER_KEY = 'game-log-user-prefix-filter';
 
 Template.game_history.onRendered(function() {
+    // Don't lose our display of the filter we typed in.
+    if (Session.get(GAME_LOG_USER_PREFIX_FILTER_KEY)) {
+        $("#game-log-user-prefix-filter").val(Session.get(GAME_LOG_USER_PREFIX_FILTER_KEY));
+    }
+
     if (Session.get(GAME_LOG_SKIPPED_RESULTS_KEY) == null) {
         Session.set(GAME_LOG_SKIPPED_RESULTS_KEY, 0);
     }
@@ -19,6 +25,21 @@ Template.game_history.helpers({
         if (Session.get('game-log-active-games-filter')) {
             filterList.push({
                 outcome: null
+            });
+        }
+
+        if (Session.get(GAME_LOG_USER_PREFIX_FILTER_KEY)) {
+            var userMatches = Meteor.users.find({
+                'profile.username': new RegExp("^" + Session.get(GAME_LOG_USER_PREFIX_FILTER_KEY) + ".*")
+            }, {
+                fields: {_id: 1}
+            }).map(function(user) { return user._id; });
+
+            filterList.push({
+                $or: [
+                    {player1Id: {$in: userMatches}},
+                    {player2Id: {$in: userMatches}}
+                ]
             });
         }
 
@@ -43,7 +64,6 @@ Template.game_history.helpers({
 
         var filters = filterList.length > 0 ? {$and: filterList} : {};
 
-
         var gamesCursor = Games.find(filters, {
             sort: {creationDate: -1},
             limit: GAME_LOG_PAGE_SIZE+1,
@@ -58,6 +78,7 @@ Template.game_history.helpers({
     }
 });
 
+var typingTimerHandle = null;
 Template.game_log.events({
     "click .js-game-log-filter": function(event) {
         var filterName = $(event.target).data("filtername");
@@ -65,6 +86,25 @@ Template.game_log.events({
 
         // Reset pagination
         Session.set(GAME_LOG_SKIPPED_RESULTS_KEY, 0);
+    },
+
+    'keyup #game-log-user-prefix-filter': function(event) {
+        // Add a debounce, so we can get the event only after the user stops typing.
+        if (typingTimerHandle) {
+            clearTimeout(typingTimerHandle);
+        }
+
+        typingTimerHandle = setTimeout(function() {
+            var val = $("#game-log-user-prefix-filter").val().trim();
+            if (!val) {
+                Session.set(GAME_LOG_USER_PREFIX_FILTER_KEY, null);
+            } else {
+                Session.set(GAME_LOG_USER_PREFIX_FILTER_KEY, val);
+            }
+
+            // Reset pagination
+            Session.set(GAME_LOG_SKIPPED_RESULTS_KEY, 0);
+        }, 500);
     },
 
     "click #game-log-prev-button": function(event) {

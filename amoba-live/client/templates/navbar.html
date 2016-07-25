@@ -30,9 +30,14 @@
                     <li class="js-nav-item {{ isActiveRoute name='about' }}">
                         <a href="/about">About</a>
                     </li>
-                    {{#if hasActiveGame currentUser}}
+                    {{#if hasActiveGame}}
                     <li class="js-nav-item active-game-highlight">
                         <a href="/lobby"><b>ACTIVE GAME</b></a>
+                    </li>
+                    {{/if}}
+                    {{#if hasIncomingChallenge}}
+                    <li class="js-nav-item incoming-challenge-highlight">
+                        <a href="/lobby"><b>INCOMING CHALLENGE</b></a>
                     </li>
                     {{/if}}
                 </ul>

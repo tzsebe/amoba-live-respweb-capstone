@@ -90,12 +90,27 @@ Template.registerHelper("getUserStatus", function(user) {
     return userStatus("Offline", "offline.png");
 });
 
-hasActiveGame = function(user) {
-    return (user && user.profile.invitation_token.current_game);
+hasActiveGame = function() {
+    return (Meteor.user() && Meteor.user().profile.invitation_token.current_game);
 }
 
-Template.registerHelper("hasActiveGame", function(user) {
-    return hasActiveGame(user);
+hasIncomingChallenge = function() {
+    if (Meteor.user() && Session.get(CURRENT_TIME_SESSION_KEY)) {
+        return Meteor.users.find({
+            "profile.invitation_token.user_id": Meteor.user()._id,
+            "profile.invitation_token.expiration_date": {$gt: Session.get(CURRENT_TIME_SESSION_KEY)}
+        }).count() > 0;
+    }
+
+    return false;
+}
+
+Template.registerHelper("hasActiveGame", function() {
+    return hasActiveGame();
+});
+
+Template.registerHelper("hasIncomingChallenge", function() {
+    return hasIncomingChallenge();
 });
 
 Template.registerHelper("cellContent", function(content, isWinningCell) {

@@ -29,3 +29,6 @@ GRID_HEIGHT = 16;
 GAME_LOG_PAGE_SIZE = 15;
 LEADERBOARD_PAGE_SIZE = 15;
 LOBBY_USERS_PAGE_SIZE = 15;
+
+// Session key for reactive time
+CURRENT_TIME_SESSION_KEY = 'reactive-current-time';

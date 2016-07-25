@@ -18,7 +18,7 @@ Template.lobby.helpers({
 Template.browse_users.onRendered(function() {
     // Don't lose our display of the filter we typed in.
     if (Meteor.user() && Session.get(LOBBY_USER_PREFIX_FILTER_KEY)) {
-        $("#user-prefix-filter").val(Session.get(LOBBY_USER_PREFIX_FILTER_KEY));
+        $("#lobby-user-prefix-filter").val(Session.get(LOBBY_USER_PREFIX_FILTER_KEY));
     }
 
     if (Session.get(LOBBY_USERS_SKIPPED_RESULTS_KEY) == null) {
@@ -82,7 +82,7 @@ Template.browse_users.events({
         }
     },
 
-    'keyup #user-prefix-filter': function(event) {
+    'keyup #lobby-user-prefix-filter': function(event) {
         // Add a debounce, so we can get the event only after the user stops typing.
         if (typingTimerHandle) {
             clearTimeout(typingTimerHandle);
@@ -90,7 +90,7 @@ Template.browse_users.events({
 
         typingTimerHandle = setTimeout(function() {
             if (Meteor.user()) {
-                var val = $("#user-prefix-filter").val().trim();
+                var val = $("#lobby-user-prefix-filter").val().trim();
                 if (!val) {
                     Session.set(LOBBY_USER_PREFIX_FILTER_KEY, null);
                 } else {
