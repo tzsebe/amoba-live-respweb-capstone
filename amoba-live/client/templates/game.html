@@ -32,14 +32,9 @@
         <hr />
 
         <!-- Player Info and Game Status -->
-        <div class="row">
-            <!-- Game status -->
-            <div class="col-md-6 col-xs-12">
-                {{#with gameStatus}}
-                {{> game_status}}
-                {{/with}}
-            </div>
-        </div>
+        {{#with gameStatus}}
+        {{> game_status}}
+        {{/with}}
 
         <!-- Game board -->
         <div class="row">
@@ -68,14 +63,10 @@
 </template>
 
 <template name="game_status">
-    <ul>
-        <li>{{#if in_progress}}Game is in progress...{{else}}Game ended on {{end_date}}{{/if}}</li>
-        <li>{{status}}</li>
-        {{#if need_timer}}
-        <!-- TODO: style timer properly. -->
-        <li>Move Timer: <span id="move-timer" data-expiration="{{dateToEpoch move_timeout_date}}"></span></li>
-        {{/if}}
-    </ul>
+    <div class="game-status">
+        <h2>{{gameStatusHeading this}}</h2>
+        <h3>{{gameStatusDetails this}}{{#if move_timeout_date}}: <span id="move-timer" data-expiration="{{dateToEpoch move_timeout_date}}" class="game-status-move-timer"></span>{{/if}}</h3>
+    </div>
 </template>
 
 <template name="cell_display">

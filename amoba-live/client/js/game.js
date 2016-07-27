@@ -70,46 +70,26 @@ Template.game_details.helpers({
             var player2Name = player2.profile.username;
 
             result.need_timer = false;
+            result.start_date = game.creationDate;
 
             // Figure out game status
             if (game.outcome) {
                 result.in_progress = false;
-                result.start_date = game.creationDate;
                 result.end_date = game.endDate;
+                result.outcome = game.outcome;
+                result.num_moves = game.moves.length;
 
-                // TODO: layer of indirection here, to help properly display
-                // the status of the game (draw, win by default, win by actual win, in progress, etc.)
-                if (game.outcome == 'draw') {
-                    result.status = "Game is a draw";
-                } else if (game.outcome == 'abandoned') {
-                    result.status = "Game has been abandoned";
-                } else {
-                    var winningPlayer = Meteor.users.findOne({_id: game.winningPlayerId});
-                    if (Meteor.user() && (Meteor.user()._id == game.player1Id || Meteor.user()._id == game.player2Id)) {
-                        if (Meteor.user()._id == winningPlayer._id) {
-                            result.status = "You win";
-                        } else {
-                            result.status = "You lose";
-                        }
-                    } else {
-                        result.status = winningPlayer.profile.username + " wins";
-                    }
+                if (game.outcome == 'complete' || game.outcome == 'default') {
+                    result.winner_id = game.winningPlayerId;
+                    result.loser_id = game.player1Id == game.winningPlayerId ? game.player2Id : game.player1Id;
                 }
             } else {
                 result.in_progress = true;
-                var nextPlayerId = game.moves.length % 2 == 0 ? game.player1Id : game.player2Id;
-                var nextPlayer = Meteor.users.findOne({_id: nextPlayerId});
-                if (Meteor.user() && nextPlayerId == Meteor.user()._id) {
-                    result.status = "It's your turn";
-                    if (game.moves.length >= 2) {
-                        result.need_timer = true;
-                        result.move_timeout_date = getMoveTimeoutDate(game);
-                    }
-                } else {
-                    result.status = "It's " + nextPlayer.profile.username + "'s turn";
+                result.current_player_id = game.moves.length % 2 == 0 ? game.player1Id : game.player2Id;
+                if (game.moves.length >= 2) {
+                    result.move_timeout_date = getMoveTimeoutDate(game);
                 }
             }
-
         }
 
         return result;

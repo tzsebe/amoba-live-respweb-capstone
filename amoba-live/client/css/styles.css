@@ -122,6 +122,16 @@ h1 {
     text-decoration: underline;
 }
 
+.game-status {
+    text-align: center;
+}
+
+.game-status-move-timer {
+    border: 2px dashed darkgrey;
+    padding: 5px 10px 5px 10px;
+    color: yellow;
+}
+
 .game-grid {
     border: 1px solid black;
     border-radius: 5px;

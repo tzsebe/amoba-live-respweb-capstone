@@ -113,6 +113,45 @@ Template.registerHelper("hasIncomingChallenge", function() {
     return hasIncomingChallenge();
 });
 
+Template.registerHelper("gameStatusHeading", function(gameStatus) {
+    if (gameStatus.in_progress) {
+        return "Game in progress!";
+    } else if (gameStatus.outcome == 'abandoned') {
+        return "Game was abandoned.";
+    } else if (gameStatus.outcome == 'draw') {
+        return "Game was a draw!";
+    } else if (gameStatus.outcome == 'complete' || gameStatus.outcome == 'default') {
+        // Someone won...
+        if (Meteor.user() && Meteor.user()._id == gameStatus.winner_id) {
+            return "You won!";
+        } else if (Meteor.user() && Meteor.user()._id == gameStatus.loser_id) {
+            return "You lost!";
+        } else {
+            return Meteor.users.findOne({_id: gameStatus.winner_id}).profile.username + " won!";
+        }
+    } else {
+        return "Game status is unknown!";
+    }
+});
+
+Template.registerHelper("gameStatusDetails", function(gameStatus) {
+    if (gameStatus.in_progress) {
+        if (Meteor.user() && Meteor.user()._id == gameStatus.current_player_id) {
+            return "It's your turn";
+        } else {
+            return "It's " + Meteor.users.findOne({_id: gameStatus.current_player_id}).profile.username + "'s turn";
+        }
+    } else if (gameStatus.winner_id) {
+        if (gameStatus.outcome == 'complete') {
+            return "Victory after " + gameStatus.num_moves + " moves.";
+        } else if (gameStatus.outcome == 'default') {
+            return "Victory by default - losing player waited too long.";
+        }
+    }
+
+    return "";
+});
+
 Template.registerHelper("cellContent", function(content, isWinningCell) {
     switch (content) {
         case 1: return isWinningCell ? "red_wins_500x500.png" : "red_500x500.png";
