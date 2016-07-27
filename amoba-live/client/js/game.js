@@ -74,6 +74,7 @@ Template.game_details.helpers({
             // Figure out game status
             if (game.outcome) {
                 result.in_progress = false;
+                result.start_date = game.creationDate;
                 result.end_date = game.endDate;
 
                 // TODO: layer of indirection here, to help properly display

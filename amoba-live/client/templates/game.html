@@ -5,29 +5,34 @@
             <li>Game Details</li>
         </ol>
 
-        <!-- Player Info and Game Status -->
+        <!-- Display who is/was playing whom -->
         <div class="row">
-            <!-- Player Info -->
-            <div class="col-md-6 col-xs-12">
-                <div class="row game-user-info-row">
-                    <div class="col-md-4">
-                    {{#with playerInfo.player1}}
-                    {{> user_info_display}}
-                    {{/with}}
-                    </div>
-
-                    <div class="col-md-1 game-user-info-vs">
-                        VS
-                    </div>
-
-                    <div class="col-md-4">
-                    {{#with playerInfo.player2}}
-                    {{> user_info_display}}
-                    {{/with}}
-                    </div>
+            <div class="col-md-4 col-sm-12">
+                {{#with playerInfo.player1}}
+                {{> user_info_display}}
+                {{/with}}
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="game-user-info-vs">
+                --== VS ==--
                 </div>
             </div>
+            <div class="col-md-4 col-sm-12">
+                {{#with playerInfo.player2}}
+                {{> user_info_display}}
+                {{/with}}
+            </div>
+        </div>
 
+        <!-- Include game start date -->
+        <div class="game-date">
+        {{gameStatus.start_date}}
+        </div>
+
+        <hr />
+
+        <!-- Player Info and Game Status -->
+        <div class="row">
             <!-- Game status -->
             <div class="col-md-6 col-xs-12">
                 {{#with gameStatus}}
@@ -56,10 +61,10 @@
 </template>
 
 <template name="user_info_display">
-   <span class="game-user-info-details">
-       <img src="/avatars/{{profile.avatar}}" title="{{profile.username}}">
+   <div class="game-user-info-details">
        {{profile.username}}{{#if isMyUser this}} [YOU]{{/if}}
-   </span>
+       <img src="/avatars/{{profile.avatar}}" title="{{profile.username}}">
+   </div>
 </template>
 
 <template name="game_status">
