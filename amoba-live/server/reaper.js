@@ -52,8 +52,8 @@ function closeAbandonedGames() {
     console.log("Closing abandoned games, if any.");
     console.log("Number of open games (start): " + openGames.length);
     for (var idx = openGames.length-1; idx >= 0; --idx) {
-        console.log("Looking at gameId " + gameId);
         var gameId = openGames[idx];
+        console.log("Looking at gameId " + gameId);
         var game = Games.findOne({_id: gameId});
         var finished = false;
         if (game) {
