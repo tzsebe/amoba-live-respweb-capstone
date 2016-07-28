@@ -37,8 +37,9 @@
         {{/with}}
 
         <!-- Game board -->
+        <a href="#" id="comments-link">(skip to comments)</a>
         <div class="row">
-            <div class="col-lg-12 game-grid">
+            <div class="col-lg-12 game-grid {{#if gameStatus.current_player_turn}}game-grid-highlighted{{/if}}">
                 {{#each cells}}
                 {{> cell_display}}
                 {{/each}}
@@ -46,7 +47,7 @@
         </div>
 
         <!-- Comments -->
-        <h3>Comments</h3>
+        <h3 id="comments-section">Comments</h3>
         <div class="row">
             <div class="col-md-8">
             {{> comments}}

@@ -4,12 +4,10 @@
 
 resetPlayersWithWinner = function(game, winningPlayerId, losingPlayerId) {
     // Get the new scores
-    console.log("Looking up scores...");
     newScores = calculateNewScores(
         Meteor.users.findOne({_id: winningPlayerId}).profile.score,
         Meteor.users.findOne({_id: losingPlayerId}).profile.score
     );
-    console.log("New scores: ", newScores);
 
     recordAndResetUser(winningPlayerId, true, newScores.winnerScore);
     recordAndResetUser(losingPlayerId, false, newScores.loserScore);
@@ -47,8 +45,6 @@ function recordAndResetUser(userId, win, newScore) {
 }
 
 calculateNewScores = function(winnerScore, loserScore) {
-    console.log("Old scores: winner = " + winnerScore + ", loser = " + loserScore);
-
     // TODO: come up with a better way to set the stakes.
     // TODO: start people off with score of zero, and add the 1000 after the first game.
     return {

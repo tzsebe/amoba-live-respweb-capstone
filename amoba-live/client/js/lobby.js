@@ -127,8 +127,6 @@ Template.user_popup_content_adapter.helpers({
 
 Template.user_popup_content.events({
     'click .js-match-user': function(event) {
-        console.log("Challenging " + this._id);
-
         // We have to bind the meteor method call to the modal hide like this,
         // to ensure that it always finishes the hide animation before calling it.
         // This is because iron:router redirects (which we use for making matches) don't
@@ -205,10 +203,8 @@ Template.invitation_details.events({
     'click .js-invitation-item': function(event) {
         if (Meteor.user()) {
             if (this._id == Meteor.user()._id) {
-                console.log("Outgoing - look up user from our invitation token.");
                 Session.set('challenge-user-profile', Meteor.users.findOne({_id: this.profile.invitation_token.user_id}));
             } else {
-                console.log("Incoming - look up id directly.");
                 Session.set('challenge-user-profile', this);
             }
         }

@@ -68,8 +68,6 @@ Meteor.methods({
                 player2Id = tmp;
             }
 
-            console.log("Player1 " + player1Id + ", player2 " + player2Id);
-
             var gameId = Games.insert({
                 player1Id: player1Id,
                 player2Id: player2Id,
@@ -78,8 +76,6 @@ Meteor.methods({
                 gridHeight: GRID_HEIGHT,
                 moves: []
             });
-
-            console.log("Game response: ", gameId);
 
             // Kill all existing invitations, and just set the gameId as the new thing.
 
@@ -92,7 +88,6 @@ Meteor.methods({
             return null;
         } else {
             // Setup the challenge/invitation
-            console.log("Challenging user with id " + targetUser._id + ", name " + targetUser.profile.username);
             var challengeDate = new Date();
             var expirationDate = new Date(challengeDate.getTime() + 1000*INVITATION_TIMEOUT_SECONDS);
             var token = {

@@ -30,6 +30,15 @@ Template.game_status.onRendered(function() {
     }, 1000);
 });
 
+Template.game_details.onRendered(function() {
+    $("#comments-link").click(function() {
+        $('html, body').stop().animate({
+            // Subtracting 60 because of fixed nav bar offset.
+            scrollTop: $('#comments-section').offset().top - 60
+        }, 1000);
+    });
+});
+
 Template.game_details.helpers({
     game: function() {
         return this;
@@ -71,6 +80,7 @@ Template.game_details.helpers({
 
             result.need_timer = false;
             result.start_date = game.creationDate;
+            result.current_player_turn = false;
 
             // Figure out game status
             if (game.outcome) {
@@ -86,6 +96,7 @@ Template.game_details.helpers({
             } else {
                 result.in_progress = true;
                 result.current_player_id = game.moves.length % 2 == 0 ? game.player1Id : game.player2Id;
+                result.current_player_turn = Meteor.user() && Meteor.user()._id == result.current_player_id;
                 if (game.moves.length >= 2) {
                     result.move_timeout_date = getMoveTimeoutDate(game);
                 }

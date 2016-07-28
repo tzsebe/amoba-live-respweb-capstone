@@ -140,6 +140,10 @@ h1 {
     padding: 10px;
 }
 
+.game-grid-highlighted {
+    background: green;
+}
+
 .grid-cell {
     /* width: x% - added separately. */
     float: left;
