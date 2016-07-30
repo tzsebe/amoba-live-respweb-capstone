@@ -18,7 +18,7 @@ resetPlayersNoWinner = function(game) {
     recordAndResetUser(game.player2Id, false, null);
 }
 
-function resetUserToken(userId) {
+resetUserToken = function(userId) {
     Meteor.users.update({_id: userId}, {
         $set: {
             "profile.invitation_token": {},

@@ -18,6 +18,9 @@ h1 {
     background: darkgoldenrod;
 }
 
+.fa-remove:hover {
+    color: red;
+}
 
 .footnote {
     font-size: 8pt;

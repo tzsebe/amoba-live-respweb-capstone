@@ -61,6 +61,7 @@
         {{#with activeOutgoingInvitation}}
         <li class="list-group-item invitation-item js-invitation-item" data-toggle="modal" data-target="#user-popup">
             {{ getUserName profile.invitation_token.user_id }}
+            <span class="fa fa-remove pull-right js-invitation-remove"></span>
             <span id="invitation-out-timer"
                   class="js-invitation-timer badge"
                   title="expires {{ profile.invitation_token.expiration_date }}"

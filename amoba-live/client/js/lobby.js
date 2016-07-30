@@ -134,7 +134,7 @@ Template.user_popup_content.events({
         //
         // The 'this' we're passing along is the userId of theuser we're trying to match up with.
         $('#user-popup').on('hidden.bs.modal', this, function(event) {
-            Meteor.call('matchUsers', event.data, function(err, result) {
+            Meteor.call('matchUsers', MATCH_USERS_CHALLENGE_OP, event.data, function(err, result) {
                 if (err) {
                     handleMeteorException(err);
                 }
@@ -208,5 +208,14 @@ Template.invitation_details.events({
                 Session.set('challenge-user-profile', this);
             }
         }
+    },
+
+    'click .js-invitation-remove': function(event) {
+        Meteor.call('matchUsers', MATCH_USERS_REMOVE_OP, function(err, result) {
+            if (err) {
+                handleMeteorException(err);
+            }
+        });
+        event.stopPropagation();
     }
 });

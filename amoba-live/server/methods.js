@@ -29,84 +29,91 @@ Meteor.methods({
      *
      * While a game is in progress, going to the lobby immediately redirects a user to the game in progress.
      */
-    matchUsers: function(targetUser) {
+    matchUsers: function(operationType, targetUser) {
         // Validate all input
         if (!Meteor.user()) {
             throw new Meteor.Error(400, "You must be logged in to perform this action.");
         }
 
-        if (!targetUser) {
-            throw new Meteor.Error(400, "targetUser must be passed in.");
+        if (operationType != MATCH_USERS_CHALLENGE_OP && operationType != MATCH_USERS_REMOVE_OP) {
+            throw new Meteor.Error(400, "Operation " + operationType + " is not a valid operation.");
         }
 
-        if (targetUser._id == Meteor.user()._id) {
-            throw new Meteor.Error(400, "You cannot challenge yourself.");
-        }
-
-        if (Meteor.user().profile.invitation_token.current_game) {
-            throw new Meteor.Error(400, "You have a game in progress - complete it first.");
-        }
-
-        // First, check for a match, and handle that accordingly.
-        var otherUserToken = targetUser.profile.invitation_token;
-        if (otherUserToken.user_id == Meteor.user()._id && otherUserToken.expiration_date > new Date()) {
-            // We've found a match, so spin up a game!
-            console.log("We have a match between user " + Meteor.user().profile.username + " and " + targetUser.profile.username);
-
-            //
-            // Create a Game
-            //
-
-            // Assign player IDs (with a date-based random element)
-            var player1Id = targetUser._id;
-            var player2Id = Meteor.user()._id;
-            if (new Date().getTime() % 2 == 0) {
-                // swap the player IDs 50% of the time... millisecond clock should be enough for this to
-                // be random enough.
-                var tmp = player1Id;
-                player1Id = player2Id;
-                player2Id = tmp;
+        if (operationType == MATCH_USERS_REMOVE_OP) {
+            resetUserToken(Meteor.user()._id);
+        } else if (operationType == MATCH_USERS_CHALLENGE_OP) {
+            if (!targetUser) {
+                throw new Meteor.Error(400, "targetUser must be passed in.");
             }
 
-            var gameId = Games.insert({
-                player1Id: player1Id,
-                player2Id: player2Id,
-                creationDate: new Date(),
-                gridWidth: GRID_WIDTH,
-                gridHeight: GRID_HEIGHT,
-                moves: []
-            });
+            if (targetUser._id == Meteor.user()._id) {
+                throw new Meteor.Error(400, "You cannot challenge yourself.");
+            }
 
-            // Kill all existing invitations, and just set the gameId as the new thing.
+            if (Meteor.user().profile.invitation_token.current_game) {
+                throw new Meteor.Error(400, "You have a game in progress - complete it first.");
+            }
 
-            setCurrentGame(player1Id, gameId);
-            setCurrentGame(player2Id, gameId);
+            // First, check for a match, and handle that accordingly.
+            var otherUserToken = targetUser.profile.invitation_token;
+            if (otherUserToken.user_id == Meteor.user()._id && otherUserToken.expiration_date > new Date()) {
+                // We've found a match, so spin up a game!
+                console.log("We have a match between user " + Meteor.user().profile.username + " and " + targetUser.profile.username);
 
-            // Record open game for reaping.
-            registerOpenGame(gameId);
+                //
+                // Create a Game
+                //
 
-            return null;
-        } else {
-            // Setup the challenge/invitation
-            var challengeDate = new Date();
-            var expirationDate = new Date(challengeDate.getTime() + 1000*INVITATION_TIMEOUT_SECONDS);
-            var token = {
-                user_id: targetUser._id,
-                challenge_date: challengeDate,
-                expiration_date: expirationDate
-            };
-            Meteor.users.update(
-                {_id: Meteor.user()._id},
-                {
-                    $set: {
-                        "profile.invitation_token": token
-                    }
+                // Assign player IDs (with a date-based random element)
+                var player1Id = targetUser._id;
+                var player2Id = Meteor.user()._id;
+                if (new Date().getTime() % 2 == 0) {
+                    // swap the player IDs 50% of the time... millisecond clock should be enough for this to
+                    // be random enough.
+                    var tmp = player1Id;
+                    player1Id = player2Id;
+                    player2Id = tmp;
                 }
-            );
 
-            return token;
+                var gameId = Games.insert({
+                    player1Id: player1Id,
+                    player2Id: player2Id,
+                    creationDate: new Date(),
+                    gridWidth: GRID_WIDTH,
+                    gridHeight: GRID_HEIGHT,
+                    moves: []
+                });
+
+                // Kill all existing invitations, and just set the gameId as the new thing.
+
+                setCurrentGame(player1Id, gameId);
+                setCurrentGame(player2Id, gameId);
+
+                // Record open game for reaping.
+                registerOpenGame(gameId);
+
+                return null;
+            } else {
+                // Setup the challenge/invitation
+                var challengeDate = new Date();
+                var expirationDate = new Date(challengeDate.getTime() + 1000*INVITATION_TIMEOUT_SECONDS);
+                var token = {
+                    user_id: targetUser._id,
+                    challenge_date: challengeDate,
+                    expiration_date: expirationDate
+                };
+                Meteor.users.update(
+                    {_id: Meteor.user()._id},
+                    {
+                        $set: {
+                            "profile.invitation_token": token
+                        }
+                    }
+                );
+
+                return token;
+            }
         }
-
     },
 
     /**

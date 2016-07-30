@@ -32,3 +32,7 @@ LOBBY_USERS_PAGE_SIZE = 15;
 
 // Session key for reactive time
 CURRENT_TIME_SESSION_KEY = 'reactive-current-time';
+
+// Match users operations
+MATCH_USERS_CHALLENGE_OP = 'match-users-challenge';
+MATCH_USERS_REMOVE_OP = 'match-users-remove';
