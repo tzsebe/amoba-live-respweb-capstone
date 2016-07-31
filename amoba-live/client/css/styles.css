@@ -157,6 +157,10 @@ h1 {
     border: 1px solid black;
 }
 
+.grid-cell-highlighted {
+    border: 1px solid green;
+}
+
 .grid-cell img {
     width: 100%;
 }

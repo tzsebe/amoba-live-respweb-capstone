@@ -43,6 +43,9 @@
                 {{#each cells}}
                 {{> cell_display}}
                 {{/each}}
+
+                <!-- Hack to get it to respect height properly. -->
+                <div style="clear: both"></div>
             </div>
         </div>
 
@@ -71,7 +74,7 @@
 </template>
 
 <template name="cell_display">
-    <div class="grid-cell {{#if isPlayerTurn}}js-clickable-grid-cell{{/if}}" style="width: {{cellWidthStyle}}" data-x="{{x}}" data-y="{{y}}" data-gameId="{{gameId}}">
+    <div class="grid-cell {{#if isPlayerTurn}}grid-cell-highlighted js-clickable-grid-cell{{/if}}" style="width: {{cellWidthStyle}}" data-x="{{x}}" data-y="{{y}}" data-gameId="{{gameId}}">
         <img src="/grid_icons/{{cellContent content isWinningCell}}">
     </div>
 </template>
