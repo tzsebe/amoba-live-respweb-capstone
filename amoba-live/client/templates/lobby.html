@@ -115,7 +115,7 @@
             <a href="#" class="no-underline js-browse-user" data-toggle="modal" data-target="#user-popup">
                 <div class="browse-users-item">
                     <img src="/avatars/{{ profile.avatar }}" class="mini-avatar">
-                    {{ profile.username }} {{#with getUserStatus this}}{{> user_status_icon}}{{/with}}
+                    <span class="wordwrap">{{ profile.username }}</span> {{#with getUserStatus this}}{{> user_status_icon}}{{/with}}
                     <br />
                     {{ profile.score }}
                 </div>
