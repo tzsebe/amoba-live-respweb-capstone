@@ -2,9 +2,9 @@ Hello,
 
 I just wanted to call out a few things here:
 
-1) If you can't get this to run, I've also deployed it to Amazon EC2: http://ec2-52-41-150-250.us-west-2.compute.amazonaws.com/
+1) If you can't get this to run, I've also deployed it to Amazon EC2: http://ec2-52-39-124-139.us-west-2.compute.amazonaws.com/
 
-2) This looks and works best in Chrome, but will work in FF and IE (need to figure out some styling issues).
+2) This looks and works best in Chrome, and was tested in Chrome, FF, and IE11.
 
 3) The user1 through user 20 accounts all have password 'aaaaaa', but you can also just create your own account.
 
