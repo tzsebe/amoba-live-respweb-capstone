@@ -100,3 +100,12 @@ Comments.attachSchema({
         type: Date
     }
 });
+
+/**
+ * Prevent user profile writes by malicious clients.
+ */
+Meteor.users.deny({
+    update: function() {
+        return true;
+    }
+});
