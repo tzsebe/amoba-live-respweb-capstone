@@ -8,7 +8,7 @@ I just wanted to call out a few things here:
 
 3) The user1 through user 20 accounts all have password 'aaaaaa', but you can also just create your own account.
 
-4) I've tested this on Ubuntu 14.04, and on Windows 7.
+4) I've tested this on Ubuntu 14.04, and on Windows 7..
 
 5) It works fine on Windows, but the Windows version of meteor likes to download and install packages upfront. If it starts downloading 1.4, and runs out of memory, just kill it and try re-running. It will work eventually.
 
